@@ -7,8 +7,6 @@ var Diff = require('text-diff');
 var Cokies = require( "js-cookie" )
 var Cookies = require( "cookies" )
 var sha3_512 = require('js-sha3').sha3_512;
-var base64 = require('base-64');
-var utf8 = require('utf8');
 var licen;
 var name;
 var FrontPage;
@@ -291,7 +289,7 @@ router.post('/register', function(req, res) {
 		else { 
 			var exists = fs.existsSync('./user/' + encodeURIComponent(req.body.id) + '.txt');
 			if(!exists) {
-				fs.writeFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', base64.encode(utf8.encode(sha3_512(req.body.pw))), 'utf8');
+				fs.writeFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', sha3_512(req.body.pw), 'utf8');
 				res.redirect('/login')
 			}
 			else {
@@ -359,7 +357,7 @@ router.post('/login', function(req, res) {
 		var exists = fs.existsSync('./user/' + encodeURIComponent(req.body.id) + '.txt');
 		if(exists) {
 			var pass = fs.readFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', 'utf8');
-			var test = base64.encode(utf8.encode(sha3_512(req.body.pw)));
+			var test = sha3_512(req.body.pw);
 
 			if(pass === test) {
 				var cookies = new Cookies( req, res )
