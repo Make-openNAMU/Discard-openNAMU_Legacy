@@ -1,6 +1,6 @@
 {
-  "name": "Open Wiki Namu Engine Test",
-  "version": "1.0-beta",
+  "name": "openNAMU(OWNET)",
+  "version": "1.2-beta",
   "private": true,
     "scripts": {
     "start": "forever start ./app.js",
