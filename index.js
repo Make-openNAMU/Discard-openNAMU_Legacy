@@ -6,7 +6,7 @@ var htmlencode = require('htmlencode');
 var Diff = require('text-diff');
 var Cokies = require( "js-cookie" );
 var Cookies = require( "cookies" );
-var scrypt = require('scrypt-password');
+var bcrypt = require('bcrypt-nodejs');
 var sha3_512 = require('js-sha3').sha3_512;
 var licen;
 var name;
@@ -290,7 +290,7 @@ router.post('/register', function(req, res) {
 		else { 
 			var exists = fs.existsSync('./user/' + encodeURIComponent(req.body.id) + '.txt');
 			if(!exists) {
-				fs.writeFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', scrypt.create(sha3_512(req.body.pw)), 'utf8');
+				fs.writeFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', bcrypt.hashSync(sha3_512(req.body.pw)), 'utf8');
 				res.redirect('/login')
 			}
 			else {
@@ -358,9 +358,10 @@ router.post('/login', function(req, res) {
 		var exists = fs.existsSync('./user/' + encodeURIComponent(req.body.id) + '.txt');
 		if(exists) {
 			var pass = fs.readFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', 'utf8');
-			var test = scrypt.create(sha3_512(req.body.pw));
+			var test = sha3_512(req.body.pw);
+			var testby = bcrypt.compareSync(test, pass);
 
-			if(pass === test) {
+			if(testby === true) {
 				var cookies = new Cookies( req, res )
 				, AqoursGanbaRuby, WikiID
 				cookies.set( "AqoursGanbaRuby", test )
