@@ -69,9 +69,9 @@ module.exports = function(req, n, ba){
   }
   six = six.replace(/&}}}/g, '</div></div></div></div>');
   
-  six = six.replace(/{{{#(\w+)\s?/ig, "<span style#is#\"color:$1;\">");
-  six = six.replace(/{{{(#[0-9a-f-A-F]{3})\s?/ig, "<span style#is#\"color:$1;\">");
   six = six.replace(/{{{(#[0-9a-f-A-F]{6})\s?/ig, "<span style#is#\"color:$1;\">");
+  six = six.replace(/{{{(#[0-9a-f-A-F]{3})\s?/ig, "<span style#is#\"color:$1;\">");
+  six = six.replace(/{{{#(\w+)\s?/ig, "<span style#is#\"color:$1;\">");
   
   six = six.replace(/{{{\+([1-5])\s?/g, "<span class#is#\"font-size-$1\">");
   six = six.replace(/{{{\-([1-5])\s?/g, "<span class#is#\"font-size-small-$1\">");
@@ -101,30 +101,30 @@ module.exports = function(req, n, ba){
   while(true) {
 	  if(style = table.exec(six)) {
 		  if(style[1]) {
-			  if(tdcell = td1.exec(style[1])) {
+			  if(tdcell = td3.exec(style[1])) {
 				  allstyle = allstyle + 'border: 2px solid ' + tdcell[1] + ';';
-				  style[1] = style[1].replace(td1, '');
+				  style[1] = style[1].replace(td3, '');
 			  }
 			  else if(tdcell = td2.exec(style[1])) {
 				  allstyle = allstyle + 'border: 2px solid ' + tdcell[1] + ';';
 				  style[1] = style[1].replace(td2, '');
 			  }
-			  else if(tdcell = td3.exec(style[1])) {
+			  else if(tdcell = td1.exec(style[1])) {
 				  allstyle = allstyle + 'border: 2px solid ' + tdcell[1] + ';';
-				  style[1] = style[1].replace(td3, '');
+				  style[1] = style[1].replace(td1, '');
 			  }
 			  
-			  if(tdcell = td6.exec(style[1])) {
+			  if(tdcell = td8.exec(style[1])) {
 				  allstyle = allstyle + 'background: ' + tdcell[1] + ';';
-				  style[1] = style[1].replace(td6, '');
+				  style[1] = style[1].replace(td8, '');
 			  }
 			  else if(tdcell = td7.exec(style[1])) {
 				  allstyle = allstyle + 'background: ' + tdcell[1] + ';';
 				  style[1] = style[1].replace(td7, '');
 			  }
-			  else if(tdcell = td8.exec(style[1])) {
+			  else if(tdcell = td6.exec(style[1])) {
 				  allstyle = allstyle + 'background: ' + tdcell[1] + ';';
-				  style[1] = style[1].replace(td8, '');
+				  style[1] = style[1].replace(td6, '');
 			  }
 			 
 		 	  if(tdcell = td4.exec(style[1])) {				  
@@ -164,7 +164,7 @@ module.exports = function(req, n, ba){
   var tr3 = /<\)>/;
   var tr4 = /<width=([^>]*)>/i;
   var tr5 = /<height=([^>]*)>/i;
-  var tr6 = /<bgolor=(\w+)>/i;
+  var tr6 = /<bgcolor=(\w+)>/i;
   var tr7 = /<bgcolor=(#[0-9a-f-A-F]{3})>/i;
   var tr8 = /<bgcolor=(#[0-9a-f-A-F]{6})>/i;
   var tr9 = /<-([0-9]+)>/i;
@@ -195,17 +195,17 @@ module.exports = function(req, n, ba){
 				  style2[1] = style2[1].replace(tr5, '');
 			  }
 			  
-			  if(trcell = tr6.exec(style2[1])) {
+			  if(trcell = tr8.exec(style2[1])) {
 				  allstyle2 = allstyle2 + 'background: ' + trcell[1] + ';';
-				  style2[1] = style2[1].replace(tr6, '');
+				  style2[1] = style2[1].replace(tr8, '');
 			  }
 			  else if(trcell = tr7.exec(style2[1])) {
 				  allstyle2 = allstyle2 + 'background: ' + trcell[1] + ';';
 				  style2[1] = style2[1].replace(tr7, '');
 			  }
-			  else if(trcell = tr8.exec(style2[1])) {
+			  else if(trcell = tr6.exec(style2[1])) {
 				  allstyle2 = allstyle2 + 'background: ' + trcell[1] + ';';
-				  style2[1] = style2[1].replace(tr8, '');
+				  style2[1] = style2[1].replace(tr6, '');
 			  }
 			  
 			  if(trcell = tr9.exec(style2[1])) {
