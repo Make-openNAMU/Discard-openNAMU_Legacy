@@ -455,7 +455,6 @@ router.get('/user/:user', function(req, res) {
 router.get('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
-    var ip = yourip(req,res);
     var title2 = encodeURIComponent(req.params.user);
     var dis2 = loginy(req,res);
 	var dis3 = loginny(req,res);
@@ -508,7 +507,8 @@ router.post('/edit/user/:user', function(req, res) {
 			if(exists) {
 				var pass = fs.readFileSync('./user/' + id + '.txt', 'utf8');
 				var test = pw;
-				if(pass === test) {
+				var testby = bcrypt.compareSync(test, pass);
+				if(testby === true) {
 					if(encodeURIComponent(req.params.user) === id) {
 						var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
 						if(exists) {
