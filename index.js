@@ -1606,7 +1606,7 @@ router.get('/w/:page/redirect/:rdrc', function(req, res) {
 				title2: title2,
 				dis: dis,
 				subtitle: encodeURIComponent(lovelive),
-				content: '<li><a href="/edit/' + req.params.rdrc + '">' + req.params.rdrc + '</a> 에서 넘어 왔습니다.</li><br>' + cnt,
+				content: '<br><li><a href="/edit/' + req.params.rdrc + '">' + req.params.rdrc + '</a> 에서 넘어 왔습니다.</li>' + cnt,
 				License: licen,
 				wikiname: name 
 			});
