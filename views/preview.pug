@@ -2,9 +2,10 @@ extends wiki
 block content
   div(id='tool') 
    nav.menu
-    a.menu-item.selected(href='#', onclick='return false') 수정
+    a.menu-item.selected(href='#', onclick='return false') 미리보기
     a.menu-item(href='/w/' + title2) 문서
-  h1= title + ' (수정)'
+  h1.title= title
+  h2.title!= '<span style="margin-left:5px"></span>(미리보기)'
   form#usrform(name='f1', method='POST', action='/edit/' + title2)
     dl.form-group
       dt
