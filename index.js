@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var parseNamu = require('./module-internal/namumark')
+
+var parseNamu = require('./module-internal/namumark');
 var fs = require('fs');
 var htmlencode = require('htmlencode');
 var Diff = require('text-diff');
@@ -8,11 +9,13 @@ var Cokies = require( "js-cookie" );
 var Cookies = require( "cookies" );
 var bcrypt = require('bcrypt-nodejs');
 var sha3_512 = require('js-sha3').sha3_512;
+
 var licen;
 var name;
 var FrontPage;
 var lb;
 var aya;
+
 // 라이선스
 function rlicen(licen) {
 	var exists = fs.existsSync('./setting/License.txt');
@@ -24,6 +27,7 @@ function rlicen(licen) {
 	}
 	return licen;
 }
+
 // 위키 이름
 function rname(name) {
 	var exists = fs.existsSync('./setting/WikiName.txt');
@@ -35,6 +39,7 @@ function rname(name) {
 	}
 	return name;
 }
+
 // 대문
 function rFrontPage(FrontPage) {
 	var exists = fs.existsSync('./setting/FrontPage.txt');
@@ -50,6 +55,7 @@ function rFrontPage(FrontPage) {
 	}
 	return FrontPage;
 }
+
 // 시간
 function getNow() {
   var today = new Date();
@@ -85,6 +91,7 @@ function getNow() {
   }
   return yyyy+'-' + mm+'-'+dd+' / '+nn+':'+aa+':'+ee;
 }
+
 // 아이피
 function yourip(req, res) {
 	var test = (req.headers['x-forwarded-for'] || '').split(',')[0] 
@@ -118,6 +125,7 @@ function yourip(req, res) {
 	}
 	return test;
 }
+
 // 로그인 부분 display
 function loginy(req,res) {
 	var cookies = new Cookies( req, res )
@@ -129,6 +137,7 @@ function loginy(req,res) {
 	return dis2;
 }
 
+// 로그아웃 부분 display
 function loginny(req,res) {
 	var cookies = new Cookies( req, res )
 	, AqoursGanbaRuby, WikiID
@@ -138,6 +147,7 @@ function loginny(req,res) {
 	}
 	return dis3;
 }
+
 // 밴
 function stop(ip) {
     var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
@@ -172,6 +182,7 @@ function stop(ip) {
 		}
 	}
 }
+
 // acl
 function editstop(ip, page) {
 	var exists = fs.existsSync('./data/' + encodeURIComponent(page) + '-stop.txt');
@@ -182,6 +193,7 @@ function editstop(ip, page) {
 		}
 	}
 }
+
 // 어드민
 function admin(ip) {
 	var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-admin.txt');
@@ -189,6 +201,7 @@ function admin(ip) {
 		return 'test';
 	}
 }
+
 // 소유자
 function mine(ip) {
 	var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-mine.txt');
@@ -196,7 +209,8 @@ function mine(ip) {
 		res.send('<script type="text/javascript">alert("소유자가 아닙니다.");</script>')
 	}
 }
-// 최근 바뀜 추가
+
+// 최근바뀜 추가
 function rplus(ip, today, name, rtitle, now, req, content) {
 	var number = fs.readFileSync('./recent/RC-number.txt', 'utf8');
 	fs.writeFileSync('./recent/RC-number.txt', Number(number)+1, 'utf8');
@@ -232,7 +246,8 @@ function rplus(ip, today, name, rtitle, now, req, content) {
 		}
 	}
 }
-// 최근 토론 추가
+
+// 최근토론 추가
 function tplus(ip, today, name, name2) {
 	var number = fs.readFileSync('./recent/RD-number.txt', 'utf8');
 	fs.writeFileSync('./recent/RD-number.txt', Number(number)+1, 'utf8');
@@ -245,6 +260,7 @@ function tplus(ip, today, name, name2) {
 	fs.openSync('./recent/RD-' + number + '-today.txt','w+');
 	fs.writeFileSync('./recent/RD-' + number + '-today.txt', today, 'utf8');	
 }
+
 // 회원 가입
 router.get('/register', function(req, res) {
 	name = rname(name);
@@ -258,7 +274,8 @@ router.get('/register', function(req, res) {
 	});
 	res.end();
 	return;
- });
+});
+ 
 // 가입 하기
 router.post('/register', function(req, res) {
 	var ip = yourip(req,res);
@@ -299,7 +316,8 @@ router.post('/register', function(req, res) {
 			}
 		}
 	}
- });
+});
+ 
 // 로그아웃
 router.get('/logout', function(req, res) {
 	licen = rlicen(licen);
@@ -321,7 +339,8 @@ router.get('/logout', function(req, res) {
 	else {
 		res.redirect('/login');
 	}
- });
+});
+
 // 로그인
 router.get('/login', function(req, res) {
 	licen = rlicen(licen);
@@ -346,7 +365,8 @@ router.get('/login', function(req, res) {
 		res.end();
 		return;
 	}
- });
+});
+ 
 // 로그인 하기
 router.post('/login', function(req, res) {
 	var ip = yourip(req,res);
@@ -379,13 +399,13 @@ router.post('/login', function(req, res) {
 	}
 });
 
-// 대문으로 이동합니다.
+// 대문으로
 router.get('/', function(req, res) {
 	FrontPage = rFrontPage(FrontPage);
 	res.redirect('/w/'+encodeURIComponent(FrontPage));
 });
 
-// 파일 업로드
+// 업로드
 router.get('/Upload', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
@@ -400,33 +420,34 @@ router.get('/Upload', function(req, res) {
 	res.end();
 	return;
 });
-// 사용자 문서
+
+// 사문
 router.get('/user/:user', function(req, res) {
-  licen = rlicen(licen);
-  name = rname(name);
-  var title2 = encodeURIComponent(req.params.user)
-  var dis2 = loginy(req,res)
-  var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
-  if(!exists) {
-	  res.status(200).render('user', { 
-		  title: '사용자:' + req.params.user, 
-		  dis: 'none', 
-		  dis2: dis2, 
-		  title2: title2, 
-		  content: '이 문서가 없습니다.', 
-		  License: licen, 
-		  wikiname: name 
-	  });
-	  res.end();
-	  return;
-  } 
-  else {
-	  var data = fs.readFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
-	  var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
-	  if(redirect.exec(data)) {
-		data = data.replace(redirect, " * 리다이렉트 [[$1]]");
-	  }
-	  parseNamu(req, data, function(cnt){
+    licen = rlicen(licen);
+    name = rname(name);
+    var title2 = encodeURIComponent(req.params.user)
+    var dis2 = loginy(req,res)
+    var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
+    if(!exists) {
+	    res.status(200).render('user', { 
+		    title: '사용자:' + req.params.user, 
+	  	    dis: 'none', 
+		    dis2: dis2, 
+		    title2: title2, 
+		    content: '이 문서가 없습니다.', 
+		    License: licen, 
+		    wikiname: name 
+	    });
+	    res.end();
+	    return;
+    }   
+    else {
+	    var data = fs.readFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
+	    var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
+	    if(redirect.exec(data)) {
+			data = data.replace(redirect, " * 리다이렉트 [[$1]]");
+	    }
+	    parseNamu(req, data, function(cnt){
 		    var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
 			var leftbarcontect;
 			if(leftbarcontect = leftbar.exec(cnt)) {
@@ -448,10 +469,11 @@ router.get('/user/:user', function(req, res) {
 			});
 			res.end();
 			return;
-	  })
-  }
+	    })
+    }
 });
-// 사용자 편집
+
+// 사문 편집
 router.get('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
@@ -487,6 +509,8 @@ router.get('/edit/user/:user', function(req, res) {
 	    return;
 	}
 });
+
+// 사문 편집 보내기
 router.post('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
