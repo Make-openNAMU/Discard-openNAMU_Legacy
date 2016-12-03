@@ -2579,10 +2579,10 @@ router.get('/history/:page', function(req, res) {
 				else {
 					var ban = '차단';
 				}
-				neoa = '<table id="toron"><tbody><tr><td id="yosolo">r' + i + ' <a href="/history/' + encodeURIComponent(req.params.page) + '/r' + i + '">(raw)</a> <a href="/history/w/' + encodeURIComponent(req.params.page) + '/r' + i + '">(w)</a> <a href="/revert/' + encodeURIComponent(req.params.page) + '/r' + i + '">(revert)' + pageplus + '</td><td id="yosolo">' + ip + ' <a href="/ban/' + ip + '">(' + ban + ')</a></td><td id="yosolo">' + today +'</td></tr><tr><td colspan="3" id="yosolo">' + send + '</td></tr></tbody></table>' + neoa;
+				neoa = '<table id="toron"><tbody><tr><td id="yosolo">r' + i + ' <a href="/history/' + encodeURIComponent(req.params.page) + '/r' + i + '">(Raw)</a> <a href="/history/w/' + encodeURIComponent(req.params.page) + '/r' + i + '">(w)</a> <a href="/revert/' + encodeURIComponent(req.params.page) + '/r' + i + '">(되돌리기)' + pageplus + '</td><td id="yosolo">' + ip + ' <a href="/ban/' + ip + '">(' + ban + ')</a></td><td id="yosolo">' + today +'</td></tr><tr><td colspan="3" id="yosolo">' + send + '</td></tr></tbody></table>' + neoa;
 			}
 			else {
-				neoa = '<table id="toron"><tbody><tr><td id="yosolo">r' + i + ' <a href="/history/' + encodeURIComponent(req.params.page) + '/r' + i + '">(raw)</a> <a href="/history/w/' + encodeURIComponent(req.params.page) + '/r' + i + '">(w)</a> <a href="/revert/' + encodeURIComponent(req.params.page) + '/r' + i + '">(revert)' + pageplus + '</td><td id="yosolo">' + ip + '</td><td id="yosolo">' + today +'</td></tr><tr><td colspan="3" id="yosolo">' + send + '</td></tr></tbody></table>' + neoa;
+				neoa = '<table id="toron"><tbody><tr><td id="yosolo">r' + i + ' <a href="/history/' + encodeURIComponent(req.params.page) + '/r' + i + '">(Raw)</a> <a href="/history/w/' + encodeURIComponent(req.params.page) + '/r' + i + '">(w)</a> <a href="/revert/' + encodeURIComponent(req.params.page) + '/r' + i + '">(되돌리기)' + pageplus + '</td><td id="yosolo">' + ip + '</td><td id="yosolo">' + today +'</td></tr><tr><td colspan="3" id="yosolo">' + send + '</td></tr></tbody></table>' + neoa;
 			}
 		}
 		else {
