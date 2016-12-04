@@ -47,6 +47,7 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(table\s?width=(?:[^>]*))>/ig, '[$1]');
   six = six.replace(/<(table\s?height=(?:[^>]*))>/ig, '[$1]');
   six = six.replace(/<(table\s?align=(?:[^>]*))>/ig, '[$1]');
+  six = six.replace(/<(table\s?textalign=(?:[^>]*))>/ig, '[$1]');
   six = six.replace(/<(table\s?bgcolor=(?:\w+))>/ig, '[$1]');
   six = six.replace(/<(table\s?bgcolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
   six = six.replace(/<(table\s?bgcolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
@@ -120,6 +121,7 @@ module.exports = function(req, n, ba){
   var td3 = /<table\s?bordercolor=(#[0-9a-f-A-F]{6})>/i;
   var td4 = /<table\s?width=([^>]*)>/i;
   var td5 = /<table\s?align=([^>]*)>/i;
+  var td9 = /<table\s?textalign=([^>]*)>/i;
   var td6 = /<table\s?bgolor=(\w+)>/i;
   var td7 = /<table\s?bgcolor=(#[0-9a-f-A-F]{3})>/i;
   var td8 = /<table\s?bgcolor=(#[0-9a-f-A-F]{6})>/i;
@@ -169,6 +171,16 @@ module.exports = function(req, n, ba){
 					  allstyle = allstyle + 'margin:auto;';
 				  }
 				  style[1] = style[1].replace(td5, '');
+			  }
+			  
+			  if(tdcell = td9.exec(style[1])) {
+				  if(tdcell[1] === 'right') {
+					  allstyle = allstyle + 'text-align: right;';
+				  }
+				  else if(tdcell[1] === 'center') {
+					  allstyle = allstyle + 'text-align: center;';
+				  }
+				  style[1] = style[1].replace(td9, '');
 			  }
 			  
 			  six = six.replace(table, "\n<table " + allstyle + "\"><tbody><tr>");
