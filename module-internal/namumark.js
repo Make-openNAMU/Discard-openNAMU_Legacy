@@ -667,9 +667,10 @@ module.exports = function(req, n, ba){
 	  }
   }
   
+  six = six.replace(/\[(?:각주|footnote)\](?:(?:(?:<br>+)*(?:\s+)*(?:\r+)*(?:\n+))+)?$/ig, "");
+  
   six = six.replace(/\n/g, "<br>");
   
-  six = six.replace(/\[(?:각주|footnote)\](((<br>+)*(\s+)*(\r+)*(\n+))+)?$/ig, "");
   six = six.replace(/\[(?:각주|footnote)\]/ig, "<br>" + tou);
   six = six + tou;
   d('1: '+six)
