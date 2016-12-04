@@ -1274,17 +1274,23 @@ router.get('/revert/:page/:r', function(req, res) {
 			res.redirect('/Access');
 		}
 		else {
-			res.status(200).render('ok', { 
-				title2: title2,
-				title: req.params.page,
-				dis2: dis2,
-				dis3: dis3,
-				wikiname: name,
-				title3: req.params.r 
-			});
+			stopy = stop(ip);
+			if(stopy) {
+				res.redirect('/ban');
+			}
+			else {
+				res.status(200).render('ok', { 
+					title2: title2,
+					title: req.params.page,
+					dis2: dis2,
+					dis3: dis3,
+					wikiname: name,
+					title3: req.params.r 
+				});
+				res.end();
+				return;
+			}
 		}
-		res.end();
-		return;
 	}
 	else {
 		res.redirect('/history/' + encodeURIComponent(req.params.page));
@@ -1353,15 +1359,21 @@ router.get('/delete/:page', function(req, res) {
 			res.redirect('/Access');
 		}
 		else {
-			res.status(200).render('delete', { 
-				title: req.params.page,
-				title2: title2,
-				dis2: dis2,
-				dis3: dis3,
-				wikiname: name
-			});
-			res.end();
-			return;
+			stopy = stop(ip);
+			if(stopy) {
+				res.redirect('/ban');
+			}
+			else {
+				res.status(200).render('delete', { 
+					title: req.params.page,
+					title2: title2,
+					dis2: dis2,
+					dis3: dis3,
+					wikiname: name
+				});
+				res.end();
+				return;
+			}
 		}
 	}
 });
@@ -1432,15 +1444,21 @@ router.get('/move/:page', function(req, res) {
 			res.redirect('/Access');
 		}
 		else {
-			res.status(200).render('move', { 
-				title: req.params.page,
-				dis2: dis2,
-				dis3: dis3,
-				title2: title2,
-				wikiname: name 
-			});
-			res.end();
-			return;
+			stopy = stop(ip);
+			if(stopy) {
+				res.redirect('/ban');
+			}
+			else {
+				res.status(200).render('move', { 
+					title: req.params.page,
+					dis2: dis2,
+					dis3: dis3,
+					title2: title2,
+					wikiname: name 
+				});
+				res.end();
+				return;
+			}
 		}
 	}
 });
