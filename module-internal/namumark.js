@@ -54,7 +54,7 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(bgcolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
   six = six.replace(/<(bgcolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
   six = six.replace(/<(-(?:[0-9]+))>/ig, '[$1]');
-  six = six.replace(/<\|(?:[0-9]+))>/ig, '[$1]');
+  six = six.replace(/<(\|(?:[0-9]+))>/ig, '[$1]');
   /* ----------- */
   
   six = xssFilters.inHTMLData(six);
