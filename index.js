@@ -15,6 +15,11 @@ var name;
 var FrontPage;
 var lb;
 var aya;
+var ip;
+var dis2;
+var dis3;
+var stopy;
+var page;
 
 // 라이선스
 function rlicen(licen) {
@@ -132,7 +137,7 @@ function loginy(req,res) {
 	, AqoursGanbaRuby, WikiID
 	
 	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
-		var dis2 = 'none';
+		dis2 = 'none';
 	}
 	return dis2;
 }
@@ -143,7 +148,7 @@ function loginny(req,res) {
 	, AqoursGanbaRuby, WikiID
 	
 	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
-		var dis3 = 'inline-block';
+		dis3 = 'inline-block';
 	}
 	return dis3;
 }
@@ -264,8 +269,8 @@ function tplus(ip, today, name, name2) {
 // 회원 가입
 router.get('/register', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	res.status(200).render('register', { 
 		wikiname: name, 
 		dis2: dis2,
@@ -278,8 +283,7 @@ router.get('/register', function(req, res) {
  
 // 가입 하기
 router.post('/register', function(req, res) {
-	var ip = yourip(req,res);
-	var stopy;
+	ip = yourip(req,res);
     stopy = stop(ip);
     if(stopy) {
    	  res.redirect('/ban');
@@ -345,6 +349,8 @@ router.get('/logout', function(req, res) {
 router.get('/login', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
+	ip = yourip(req,res);
+	stopy = stop(ip);
 	var cookies = new Cookies( req, res )
 	, AqoursGanbaRuby, WikiID
 	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
@@ -358,19 +364,23 @@ router.get('/login', function(req, res) {
 		return;
 	}
 	else {
-		res.status(200).render('login', { 
-			wikiname: name, 
-			title: '로그인'  
-		});
-		res.end();
-		return;
+		if(stopy) {
+			res.redirect('/ban');
+		}
+		else {
+			res.status(200).render('login', { 
+				wikiname: name, 
+				title: '로그인'  
+			});
+			res.end();
+			return;
+		}
 	}
 });
  
 // 로그인 하기
 router.post('/login', function(req, res) {
-	var ip = yourip(req,res);
-	var stopy;
+	ip = yourip(req,res);
 	stopy = stop(ip);
 	if(stopy) {
 		res.redirect('/ban');
@@ -409,16 +419,23 @@ router.get('/', function(req, res) {
 router.get('/Upload', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
-	res.status(200).render('upload', { 
-		title: '파일 업로드', 
-		dis2: dis2, 
-		dis3: dis3,
-		wikiname: name 
-	});
-	res.end();
-	return;
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
+	ip = yourip(req,res);
+	stopy = stop(ip);
+	if(stopy) {
+		res.redirect('/ban');
+	}
+	else {
+		res.status(200).render('upload', { 
+			title: '파일 업로드', 
+			dis2: dis2, 
+			dis3: dis3,
+			wikiname: name 
+		});
+		res.end();
+		return;
+	}
 });
 
 // 사문
@@ -426,7 +443,7 @@ router.get('/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
     var title2 = encodeURIComponent(req.params.user)
-    var dis2 = loginy(req,res)
+    dis2 = loginy(req,res)
     var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
     if(!exists) {
 	    res.status(200).render('user', { 
@@ -477,36 +494,48 @@ router.get('/user/:user', function(req, res) {
 router.get('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
+	stopy = stop(ip);
     var title2 = encodeURIComponent(req.params.user);
-    var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+    dis2 = loginy(req,res);
+	ip = yourip(req,res);
+	dis3 = loginny(req,res);
 	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
 	if(!exists) {
-		res.status(200).render('user-edit', { 
-			title: '사용자:' + req.params.user, 
-			dis2: dis2, 
-			dis3: dis3,
-			title2: title2, 
-			content: '', 
-			License: licen, 
-		    wikiname: name 
-		});
-		res.end();
-	    return;
+		if(stopy) {
+			res.redirect('/ban');
+		}
+		else {
+			res.status(200).render('user-edit', { 
+				title: '사용자:' + req.params.user, 
+				dis2: dis2, 
+				dis3: dis3,
+				title2: title2, 
+				content: '', 
+				License: licen, 
+				wikiname: name 
+			});
+			res.end();
+			return;
+		}
 	} 
 	else {
-		var data = fs.readFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
-		res.status(200).render('user-edit', { 
-			title: '사용자:' + req.params.user, 
-			dis2: dis2, 
-			dis3: dis3,
-			title2: title2, 
-			content: data, 
-			License: licen, 
-			wikiname: name 
-	    });
-	    res.end();
-	    return;
+		if(stopy) {
+			res.redirect('/ban');
+		}
+		else {
+			var data = fs.readFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
+			res.status(200).render('user-edit', { 
+				title: '사용자:' + req.params.user, 
+				dis2: dis2, 
+				dis3: dis3,
+				title2: title2, 
+				content: data, 
+				License: licen, 
+				wikiname: name 
+			});
+			res.end();
+			return;
+		}
 	}
 });
 
@@ -515,8 +544,7 @@ router.post('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
     var title2 = encodeURIComponent(req.params.user);
-    var ip = yourip(req,res);
-    var stopy;
+    ip = yourip(req,res);
     stopy = stop(ip);
     if(stopy) {
 	    res.redirect('/ban');
@@ -645,8 +673,8 @@ router.get('/setup', function(req, res) {
 router.get('/topic/:page', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
-    var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+    dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
     var title2 = encodeURIComponent(req.params.page);
     var exists = fs.existsSync('./topic/' + encodeURIComponent(req.params.page) + '/');
     if(exists) {
@@ -662,7 +690,7 @@ router.get('/topic/:page', function(req, res) {
 				add = add + '<h2><a href="/topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '">' + j + '. ' + htmlencode.htmlEncode(decodeURIComponent(topic[i])) + '</a></h2>';
 			  
 				var data = htmlencode.htmlEncode(fs.readFileSync('./topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '/1.txt', 'utf8'));
-				var ip = fs.readFileSync('./topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '/1-ip.txt', 'utf8');
+				ip = fs.readFileSync('./topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '/1-ip.txt', 'utf8');
 				var today = fs.readFileSync('./topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '/1-today.txt', 'utf8');
 				data = data.replace(/&lt;a href=&quot;(#[0-9]*)&quot;&gt;(?:#[0-9]*)&lt;\/a&gt;/g, '<a href="$1">$1</a>')
 				var exists = fs.existsSync('./topic/' + encodeURIComponent(req.params.page) + '/' + topic[i] + '/1-stop.txt');
@@ -706,7 +734,7 @@ router.post('/topic/:page', function(req, res) {
 
 // 토론 블라인드
 router.get('/topic/:page/:topic/b:number', function(req, res) {
-	var ip = yourip(req,res);
+	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -740,7 +768,7 @@ router.get('/topic/:page/:topic/b:number', function(req, res) {
 // 토론 정지
 router.get('/topic/:page/:topic/stop', function(req, res) {
 	name = rname(name);
-	var ip = yourip(req,res);
+	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -761,8 +789,8 @@ router.get('/topic/:page/:topic/stop', function(req, res) {
 router.get('/topic/:page/:topic', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
-    var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);	
+    dis2 = loginy(req,res);
+	dis3 = loginny(req,res);	
     var admin = yourip(req, res);
     var title2 = encodeURIComponent(req.params.page);
     var title3 = encodeURIComponent(req.params.topic);
@@ -826,7 +854,7 @@ router.get('/topic/:page/:topic', function(req, res) {
 			}
 			else {
 				var data = htmlencode.htmlEncode(fs.readFileSync(file + '/' + i + '.txt', 'utf8'));
-				var ip = fs.readFileSync(file + '/' + i + '-ip.txt', 'utf8');
+				ip = fs.readFileSync(file + '/' + i + '-ip.txt', 'utf8');
 				var today = fs.readFileSync(file + '/' + i + '-today.txt', 'utf8');
 				data = data.replace(/&lt;a href=&quot;(#[0-9]*)&quot;&gt;(?:#[0-9]*)&lt;\/a&gt;/g, '<a href="$1">$1</a>')
 				var bl = '블라인드';
@@ -956,8 +984,7 @@ router.get('/topic/:page/:topic', function(req, res) {
 
 // post
 router.post('/topic/:page/:topic', function(req, res) {
-    var ip = yourip(req,res);
-    var stopy;
+    ip = yourip(req,res);
     stopy = stop(ip);
     if(stopy) {
 	    res.redirect('/ban');
@@ -984,7 +1011,7 @@ router.post('/topic/:page/:topic', function(req, res) {
 		    else {
 			  var number = fs.readFileSync(nfile, 'utf8');
 		    }
-		    var page = req.params.page;
+		    page = req.params.page;
 		    var today = getNow();
 		    var name = req.params.page;
 		    var name2 = req.params.topic;
@@ -1016,8 +1043,8 @@ router.post('/topic/:page/:topic', function(req, res) {
 // 밴 겟
 router.get('/ban/:ip', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-ban.txt');
 	if(exists) {
 		var nowthat = '차단 해제';
@@ -1039,7 +1066,7 @@ router.get('/ban/:ip', function(req, res) {
 
 // 밴 추가
 router.post('/ban/:ip', function(req, res) {
-	var ip = yourip(req,res);
+	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -1078,7 +1105,7 @@ router.post('/ban/:ip', function(req, res) {
  
 // 어드민 부여
 router.get('/admin/:ip', function(req, res) {
-	var ip = yourip(req,res);
+	ip = yourip(req,res);
 	mine(ip);
 	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
 	if(exists) {
@@ -1093,8 +1120,8 @@ router.get('/admin/:ip', function(req, res) {
 // 밴 리스트
 router.get('/ban', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var sun = fs.readdirSync('./user');
 	var shine = 0;
 	var ganba;
@@ -1133,7 +1160,7 @@ router.get('/ban', function(req, res) {
 
 // ACL
 router.get('/acl/:page', function(req, res) {
-	var ip = yourip(req,res);
+	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -1160,8 +1187,8 @@ router.get('/w/', function(req, res) {
 router.get('/ver', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req, res);
-	var dis3 = loginny(req, res);
+	dis2 = loginy(req, res);
+	dis3 = loginny(req, res);
 	var neob = fs.readFileSync('./ver.txt', 'utf8');
 	res.status(200).render('ban', { 
 		title: '위키 버전', 
@@ -1191,8 +1218,8 @@ router.post('/search', function(req, res) {
 router.get('/diff/:page/:r/:rr', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page)+'/r1.txt');
 	if(exists) {
@@ -1234,19 +1261,27 @@ router.get('/diff/:page/:r/:rr', function(req, res) {
 router.get('/revert/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
+	ip = yourip(req,res);
+	page = req.params.page;
 	var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/'+ req.params.r +'.txt');
 	if(exists) {
-		res.status(200).render('ok', { 
-			title2: title2,
-			title: req.params.page,
-			dis2: dis2,
-			dis3: dis3,
-			wikiname: name,
-			title3: req.params.r 
-		});
+		aya = editstop(ip, page);
+		if(aya) {
+			res.redirect('/Access');
+		}
+		else {
+			res.status(200).render('ok', { 
+				title2: title2,
+				title: req.params.page,
+				dis2: dis2,
+				dis3: dis3,
+				wikiname: name,
+				title3: req.params.r 
+			});
+		}
 		res.end();
 		return;
 	}
@@ -1258,14 +1293,13 @@ router.get('/revert/:page/:r', function(req, res) {
 // 되돌리기 2
 router.post('/revert/:page/:r', function(req, res) {
 	name = rname(name);
-	var ip = yourip(req,res);
-	var page = req.params.page;
+	ip = yourip(req,res);
+	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
-		var stopy;
 		stopy = stop(ip);
 		if(stopy) {
 			res.redirect('/ban');
@@ -1302,8 +1336,10 @@ router.post('/revert/:page/:r', function(req, res) {
 // 문서 삭제
 router.get('/delete/:page', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	ip = yourip(req,res);
+	dis3 = loginny(req,res);
+	page = req.params.page;
 	var today = getNow();
 	var title2 = encodeURIComponent(req.params.page);  
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page) + '.txt');
@@ -1311,29 +1347,34 @@ router.get('/delete/:page', function(req, res) {
 		res.redirect('/w/' + encodeURIComponent(req.params.page));
 	}
 	else {
-		res.status(200).render('delete', { 
-			title: req.params.page,
-			title2: title2,
-			dis2: dis2,
-			dis3: dis3,
-			wikiname: name
-		});
-		res.end();
-		return;
+		aya = editstop(ip, page);
+		if(aya) {
+			res.redirect('/Access');
+		}
+		else {
+			res.status(200).render('delete', { 
+				title: req.params.page,
+				title2: title2,
+				dis2: dis2,
+				dis3: dis3,
+				wikiname: name
+			});
+			res.end();
+			return;
+		}
 	}
 });
  
 // 문서 삭제 처리
 router.post('/delete/:page', function(req, res) {
 	name = rname(name);
-	var ip = yourip(req,res);
-	var page = req.params.page;
+	ip = yourip(req,res);
+	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
-		var stopy;
 		stopy = stop(ip);
 		if(stopy) {
 			res.redirect('/ban');
@@ -1375,37 +1416,44 @@ router.post('/delete/:page', function(req, res) {
 // 문서 이동
 router.get('/move/:page', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	ip = yourip(req,res);
+	dis3 = loginny(req,res);
+	page = req.params.page;
 	var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 	if(!exists) {
 		res.redirect('/w/' + encodeURIComponent(req.params.page));
 	}
 	else {
-		res.status(200).render('move', { 
-			title: req.params.page,
-			dis2: dis2,
-			dis3: dis3,
-			title2: title2,
-			wikiname: name 
-		});
-		res.end();
-		return;
+		aya = editstop(ip, page);
+		if(aya) {
+			res.redirect('/Access');
+		}
+		else {
+			res.status(200).render('move', { 
+				title: req.params.page,
+				dis2: dis2,
+				dis3: dis3,
+				title2: title2,
+				wikiname: name 
+			});
+			res.end();
+			return;
+		}
 	}
 });
 
 // post
 router.post('/move/:page', function(req, res) {
 	name = rname(name);
-	var ip = yourip(req,res);
-	var page = req.params.page;
+	ip = yourip(req,res);
+	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
-		var stopy;
 		stopy = stop(ip);
 		if(stopy) {
 			res.redirect('/ban');
@@ -1486,8 +1534,8 @@ router.get('/w/:page', function(req, res) {
 	    var dis = 'none';
 	    lovelive = req.params.page;
     }
-    var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+    dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
     var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 	if(!exists) {
@@ -1581,8 +1629,8 @@ router.get('/w/:page/redirect/:rdrc', function(req, res) {
 	    var dis = 'none';
 	    lovelive = req.params.page;
     }
-    var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+    dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
     var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 	if(!exists) {
@@ -1645,8 +1693,8 @@ router.post('/preview/:page', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
 	FrontPage = rFrontPage(FrontPage);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
 	var data = req.body.content;
 	data = data.replace(redirect, " * 리다이렉트 [[$1]]");
@@ -1684,17 +1732,17 @@ router.get('/RecentChanges', function(req, res) {
 	var number = fs.readFileSync('./recent/RC-number.txt', 'utf8');
 	var i = 0;
 	var data = '';
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	while(true) {
 		if(Number(number) < 51) {
 			i = i + 1;
 			var exists = fs.existsSync('./recent/RC-' + i + '.txt');
 			if(exists) {			
-				var ip = fs.readFileSync('./recent/RC-' + i + '-ip.txt', 'utf8');
+				ip = fs.readFileSync('./recent/RC-' + i + '-ip.txt', 'utf8');
 				var today = fs.readFileSync('./recent/RC-' + i + '-today.txt', 'utf8');
 				var title = fs.readFileSync('./recent/RC-' + i + '-title.txt', 'utf8');
-				var page = fs.readFileSync('./recent/RC-' + i + '.txt', 'utf8');
+				page = fs.readFileSync('./recent/RC-' + i + '.txt', 'utf8');
 				var exists = fs.existsSync('./recent/RC-' + i + '-leng.txt');
 				if(exists) {
 					var plus = /\+/g;
@@ -1797,10 +1845,10 @@ router.get('/RecentChanges', function(req, res) {
 						}
 					}
 				}
-				var ip = fs.readFileSync('./recent/RC-' + i + '-ip.txt', 'utf8');
+				ip = fs.readFileSync('./recent/RC-' + i + '-ip.txt', 'utf8');
 				var today = fs.readFileSync('./recent/RC-' + i + '-today.txt', 'utf8');
 				var title = fs.readFileSync('./recent/RC-' + i + '-title.txt', 'utf8');
-				var page = fs.readFileSync('./recent/RC-' + i + '.txt', 'utf8');
+				page = fs.readFileSync('./recent/RC-' + i + '.txt', 'utf8');
 				var exists = fs.existsSync('./recent/RC-' + i + '-leng.txt');
 				if(exists) {
 					var plus = /\+/g;
@@ -1877,8 +1925,8 @@ router.get('/RecentDiscuss', function(req, res, next) {
 	licen = rlicen(licen);
 	name = rname(name);
 	var admin = yourip(req, res);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var number = fs.readFileSync('./recent/RD-number.txt', 'utf8');
 	var i = 0;
 	var data = '';
@@ -1887,10 +1935,10 @@ router.get('/RecentDiscuss', function(req, res, next) {
 			i = i + 1;
 			var exists = fs.existsSync('./recent/RD-' + i + '.txt');
 			if(exists) {				
-				var ip = fs.readFileSync('./recent/RD-' + i + '-ip.txt', 'utf8');
+				ip = fs.readFileSync('./recent/RD-' + i + '-ip.txt', 'utf8');
 				var today = fs.readFileSync('./recent/RD-' + i + '-today.txt', 'utf8');
 				var title = fs.readFileSync('./recent/RD-' + i + '-title.txt', 'utf8');
-				var page = fs.readFileSync('./recent/RD-' + i + '.txt', 'utf8');
+				page = fs.readFileSync('./recent/RD-' + i + '.txt', 'utf8');
 				var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 				if(exists) {
 					var ban = '풀기';
@@ -1969,10 +2017,10 @@ router.get('/RecentDiscuss', function(req, res, next) {
 						}
 					}
 				}
-				var ip = fs.readFileSync('./recent/RD-' + i + '-ip.txt', 'utf8');
+				ip = fs.readFileSync('./recent/RD-' + i + '-ip.txt', 'utf8');
 				var today = fs.readFileSync('./recent/RD-' + i + '-today.txt', 'utf8');
 				var title = fs.readFileSync('./recent/RD-' + i + '-title.txt', 'utf8');
-				var page = fs.readFileSync('./recent/RD-' + i + '.txt', 'utf8');
+				page = fs.readFileSync('./recent/RD-' + i + '.txt', 'utf8');
 				var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 				if(exists) {
 					var ban = '풀기';
@@ -2030,8 +2078,8 @@ router.get('/raw/:page', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
 	FrontPage = rFrontPage(FrontPage);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
     var data = fs.readFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', 'utf8');
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 	if(!exists) {
@@ -2062,8 +2110,8 @@ router.post('/history/:page', function(req, res) {
  
 // 역링크
 router.get('/xref/:page', function(req, res) {
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	name = rname(name);
 	var shine = 0;
 	var ganba;
@@ -2119,8 +2167,8 @@ router.get('/xref/:page', function(req, res) {
 
 // 모든 문서
 router.get('/TitleIndex', function(req, res) {
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	name = rname(name);
 	var sun = fs.readdirSync('./data');
 	var shine = 0;
@@ -2197,8 +2245,8 @@ router.get('/random', function(req, res) {
 // 편집 화면을 보여줍니다.
 router.get('/edit/:page', function(req, res) {
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	if(encodeURIComponent(req.params.page).length > 255) {
 		res.send('<script type="text/javascript">alert("문서 명이 너무 깁니다.");</script>')
 	}
@@ -2236,8 +2284,8 @@ router.get('/edit/:page', function(req, res) {
 router.get('/edit/:page/:number', function(req, res) {
 	name = rname(name);
 	
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	
 	if(encodeURIComponent(req.params.page).length > 255) {
 		res.send('<script type="text/javascript">alert("문서 명이 너무 깁니다.");</script>');
@@ -2307,9 +2355,8 @@ router.get('/edit/:page/:number', function(req, res) {
 router.post('/edit/:page', function(req, res) {
 	name = rname(name);
 	var today = getNow();
-	var ip = yourip(req,res);
-	var page = req.params.page;
-    var stopy;
+	ip = yourip(req,res);
+	page = req.params.page;
 	stopy = stop(ip);
 	if(stopy) {
 		res.redirect('/ban');
@@ -2436,8 +2483,8 @@ router.post('/edit/:page', function(req, res) {
 router.get('/history/w/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var title3 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/' + req.params.r + '.txt');
 	if(exists) {
@@ -2491,8 +2538,8 @@ router.get('/history/w/:page/:r', function(req, res) {
 router.get('/history/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var title3 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/' + req.params.r + '.txt');
 	if(exists) {
@@ -2535,8 +2582,8 @@ router.get('/history/:page', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
 	var admin = yourip(req, res);
-	var dis2 = loginy(req,res);
-	var dis3 = loginny(req,res);
+	dis2 = loginy(req,res);
+	dis3 = loginny(req,res);
 	var title2 = encodeURIComponent(req.params.page);
 	var i = 0;
 	var neoa = '<div id="history">';
@@ -2544,7 +2591,7 @@ router.get('/history/:page', function(req, res) {
 		i = i + 1;
 		var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
 		if(exists) {
-			var ip = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', 'utf8');
+			ip = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', 'utf8');
 			var today = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', 'utf8');
 			var send = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', 'utf8');
 			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt');
@@ -2609,8 +2656,8 @@ router.get('/history/:page', function(req, res) {
 
 // 액세스 방지
 router.get('/Access', function(req, res) {
-	var dis2 = loginy(req, res);
-	var dis3 = loginny(req, res);
+	dis2 = loginy(req, res);
+	dis3 = loginny(req, res);
 	name = rname(name);
 	res.status(404).render('ban', { 
 		title: '권한 오류', 
@@ -2625,8 +2672,8 @@ router.get('/Access', function(req, res) {
 
 // 기타 도움 문서
 router.get('/other', function(req, res) {
-	var dis2 = loginy(req, res);
-	var dis3 = loginny(req, res);
+	dis2 = loginy(req, res);
+	dis3 = loginny(req, res);
 	name = rname(name);
 	res.status(404).render('ban', { 
 		title: '기타 메뉴', 
