@@ -56,6 +56,9 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(bgcolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
   six = six.replace(/<(-(?:[0-9]+))>/ig, '[$1]');
   six = six.replace(/<(\|(?:[0-9]+))>/ig, '[$1]');
+  six = six.replace(/<(:)>/ig, '[$1]');
+  six = six.replace(/<(\()>/ig, '[$1]');
+  six = six.replace(/<(\))>/ig, '[$1]');
   /* ----------- */
   
   six = xssFilters.inHTMLData(six);
@@ -78,6 +81,9 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[(bgcolor=(?:#[0-9a-f-A-F]{6}))\]/ig, '<$1>');
   six = six.replace(/\[(-(?:[0-9]+))\]/ig, '<$1>');
   six = six.replace(/\[(\|(?:[0-9]+))\]/ig, '<$1>');
+  six = six.replace(/\[(:)\]/ig, '<$1>');
+  six = six.replace(/\[(\()\]/ig, '<$1>');
+  six = six.replace(/\[(\))\]/ig, '<$1>');
   
   six = six.replace(/\[\[youtube\(([^)]*)\)\]\]/ig, "[youtube($1)]");
   six = six.replace(/\[\[include\(([^)]*)\)\]\]/ig, "[include($1)]");
