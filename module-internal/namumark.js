@@ -24,8 +24,37 @@ module.exports = function(req, n, ba){
   }
   six = '\r\n' + six + '\r\n';
 
-  /* 추가 파싱 포함 됨 */
-  six = six.replace(/<((?:span|font|iframe|table\s?bordercolor=(?:\w+)|table\s?bordercolor=(?:#[0-9a-f-A-F]{3})|table\s?bordercolor=(?:#[0-9a-f-A-F]{6})|table\s?width=(?:[^>]*)|table\s?align=(?:[^>]*)|table\s?bgcolor=(?:\w+)|table\s?bgcolor=(?:#[0-9a-f-A-F]{3})|table\s?bgcolor=(?:#[0-9a-f-A-F]{6})|\:|\(|\)|bgcolor=(?:\w+)|bgcolor=(?:#[0-9a-f-A-F]{3})|bgcolor=(?:#[0-9a-f-A-F]{6})|-(?:[0-9]+)|\|(?:[0-9]+)|big|small|del|s|\/(?:span|font|iframe|big|small|del|s))(\s[^>]+)?)>/ig, '[$1]');
+  six = six.replace(/<(span(\s[^>]+)?)>/ig, '[$1]');
+  six = six.replace(/<(font(\s[^>]+)?)>/ig, '[$1]');
+  six = six.replace(/<(iframe(\s[^>]+)?)>/ig, '[$1]');
+  six = six.replace(/<(big)>/ig, '[$1]');
+  six = six.replace(/<(small)>/ig, '[$1]');
+  six = six.replace(/<(del)>/ig, '[$1]');
+  six = six.replace(/<(s)>/ig, '[$1]');
+  
+  six = six.replace(/<(\/span)>/ig, '[$1]');
+  six = six.replace(/<(\/font)>/ig, '[$1]');
+  six = six.replace(/<(\/iframe)>/ig, '[$1]');
+  six = six.replace(/<(\/big)>/ig, '[$1]');
+  six = six.replace(/<(\/small)>/ig, '[$1]');
+  six = six.replace(/<(\/del)>/ig, '[$1]');
+  six = six.replace(/<(\/s)>/ig, '[$1]');
+  
+  /* 추가 파싱 */
+  six = six.replace(/<(table\s?bordercolor=(?:\w+))>/ig, '[$1]');
+  six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
+  six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
+  six = six.replace(/<(table\s?width=(?:[^>]*))>/ig, '[$1]');
+  six = six.replace(/<(table\s?height=(?:[^>]*))>/ig, '[$1]');
+  six = six.replace(/<(table\s?align=(?:[^>]*))>/ig, '[$1]');
+  six = six.replace(/<(table\s?bgcolor=(?:\w+))>/ig, '[$1]');
+  six = six.replace(/<(table\s?bgcolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
+  six = six.replace(/<(table\s?bgcolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
+  six = six.replace(/<(bgcolor=(?:\w+))>/ig, '[$1]');
+  six = six.replace(/<(bgcolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
+  six = six.replace(/<(bgcolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
+  six = six.replace(/<(-(?:[0-9]+))>/ig, '[$1]');
+  six = six.replace(/<\|(?:[0-9]+))>/ig, '[$1]');
   /* ----------- */
   
   six = xssFilters.inHTMLData(six);
@@ -228,7 +257,6 @@ module.exports = function(req, n, ba){
 		  break;
 	  }
   }
-  
   /* 끝 */
   
   var ohhhh = /\n>\s?((?:[^\n]*)(?:(?:(?:(?:\n>\s?)(?:[^\n]*))+)?))/;
@@ -247,7 +275,6 @@ module.exports = function(req, n, ba){
   }
   
   six = six.replace(/##\s?([^\n]*)\n/g, "<div style='display:none;'>$1</div>");
-  
   six = six.replace(/\[\[분류:([^\]\]]*)\]\]/g, "");
   
   var include = /\[include\(([^)]*)\)\]/i;
@@ -615,7 +642,21 @@ module.exports = function(req, n, ba){
   six = six + tou;
   d('1: '+six)
   
-  six = six.replace(/\[((?:span|font|iframe|big|small|del|s|\/(?:span|font|iframe|big|small|del|s))(\s[^\]]+)?)]/ig, '<$1>');
+  six = six.replace(/\[(span(\s[^\]]+)?)\]/ig, '<$1>');
+  six = six.replace(/\[(font(\s[^\]]+)?)\]/ig, '<$1>');
+  six = six.replace(/\[(iframe(\s[^\]]+)?)\]/ig, '<$1>');
+  six = six.replace(/\[(big)\]/ig, '<$1>');
+  six = six.replace(/\[(small)\]/ig, '<$1>');
+  six = six.replace(/\[(del)\]/ig, '<$1>');
+  six = six.replace(/\[(s)\]/ig, '<$1>');
+  
+  six = six.replace(/\[(\/span)\]/ig, '<$1>');
+  six = six.replace(/\[(\/font)\]/ig, '<$1>');
+  six = six.replace(/\[(\/iframe)\]/ig, '<$1>');
+  six = six.replace(/\[(\/big)\]/ig, '<$1>');
+  six = six.replace(/\[(\/small)\]/ig, '<$1>');
+  six = six.replace(/\[(\/del)\]/ig, '<$1>');
+  six = six.replace(/\[(\/s)\]/ig, '<$1>');
   
   //  six = plugin(six);
   ba(six)
