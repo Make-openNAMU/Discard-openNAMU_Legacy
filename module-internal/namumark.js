@@ -66,10 +66,10 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[(table\s?bordercolor=(?:\w+))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))\]/ig, '<$1>');
-  six = six.replace(/\[(table\s?width=(?:[^>]*))\]/ig, '<$1>');
-  six = six.replace(/\[(table\s?height=(?:[^>]*))\]/ig, '<$1>');
-  six = six.replace(/\[(table\s?align=(?:[^>]*))\]/ig, '<$1>');
-  six = six.replace(/\[(table\s?textalign=(?:[^>]*))\]/ig, '<$1>');
+  six = six.replace(/\[(table\s?width=(?:[^\]]*))\]/ig, '<$1>');
+  six = six.replace(/\[(table\s?height=(?:[^\]]*))\]/ig, '<$1>');
+  six = six.replace(/\[(table\s?align=(?:[^\]]*))\]/ig, '<$1>');
+  six = six.replace(/\[(table\s?textalign=(?:[^\]]*))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bgcolor=(?:\w+))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bgcolor=(?:#[0-9a-f-A-F]{3}))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bgcolor=(?:#[0-9a-f-A-F]{6}))\]/ig, '<$1>');
