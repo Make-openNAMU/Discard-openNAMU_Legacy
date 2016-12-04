@@ -1,9 +1,9 @@
 #RecentChanges:hover, #RecentChanges:focus {
     text-decoration: none;
-	color: #B2E3DD;
+	color: #d1bd6b;
 }
 #logo:hover, #logo:focus {
-    color: #B2E3DD;
+    color: #d1bd6b;
 }
 
 #in {
@@ -21,7 +21,7 @@
     padding: 5px;
 }
 #log:hover, #log:focus {
-    color: #B2E3DD;
+    color: #d1bd6b;
 }
 
 textarea, label, span, body, strong, b, div, h1, h2, h3, h4, h5, h6, h7, input {
@@ -225,7 +225,7 @@ s:hover, strike:hover, del:hover {
 .one-fifth.column {
     margin-bottom: 20px;
 	margin-top: -18px;
-	background: #008275;
+	background: #867324;
 	z-index: 2;
 	position: relative;
 }
