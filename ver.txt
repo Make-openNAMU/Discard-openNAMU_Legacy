@@ -78,3 +78,6 @@
 (예): 예고<br>
 (개): 개선 필요<br>
 (진): 진행중
+
+<h2> 인용문 아이콘 라이선스 </h2>
+<li>Quote Icon <a href="http://www.flaticon.com/free-icon/quote-left_25672">Dave Gandy</a> CC 3.0 BY</li>
