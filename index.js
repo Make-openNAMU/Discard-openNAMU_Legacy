@@ -802,11 +802,8 @@ router.get('/topic/:page/:topic', function(req, res) {
   
     var exists = fs.existsSync(rfile);
     if(!exists) {
-		if(encodeURIComponent(req.params.page).length > 255) {
+		if(encodeURIComponent(req.params.topic) + '-10000-today'.length > 255) {
 			res.send('<script type="text/javascript">alert("문서 명이 너무 깁니다.");</script>')
-		}
-		else if(encodeURIComponent(req.params.topic) + '-10000-today'.length > 255) {
-			res.send('<script type="text/javascript">alert("토론 명이 너무 깁니다.");</script>')
 		}
 		var toronstop = '';		
 		res.status(200).render('topic', {
@@ -824,11 +821,8 @@ router.get('/topic/:page/:topic', function(req, res) {
 		return;
     }
 	else {
-		if(encodeURIComponent(req.params.page).length > 255) {
+		if(encodeURIComponent(req.params.topic) + '-10000-today'.length > 255) {
 			res.send('<script type="text/javascript">alert("문서 명이 너무 깁니다.");</script>')
-		}
-		else if(encodeURIComponent(req.params.topic) + '-10000-today'.length > 255) {
-			res.send('<script type="text/javascript">alert("토론 명이 너무 깁니다.");</script>')
 		}
 		var number = fs.readFileSync(nfile, 'utf8');
 		number = Number(number);
@@ -1052,16 +1046,23 @@ router.get('/ban/:ip', function(req, res) {
 	else {
 		var nowthat = '차단';
 	}
-	res.status(200).render('ban-get', { 
-		enter: nowthat, 
-		title: req.params.ip, 
-		title2: encodeURIComponent(req.params.ip), 
-		dis2: dis2,
-		dis3: dis3,
-		wikiname: name 
-	});
-	res.end();
-	return;
+	ip = yourip(req,res);
+    aya = admin(ip);
+	if(aya) {
+		res.redirect('/Access');
+	}
+	else {
+		res.status(200).render('ban-get', { 
+			enter: nowthat, 
+			title: req.params.ip, 
+			title2: encodeURIComponent(req.params.ip), 
+			dis2: dis2,
+			dis3: dis3,
+			wikiname: name 
+		});
+		res.end();
+		return;
+	}
 });
 
 // 밴 추가
@@ -1698,30 +1699,44 @@ router.post('/preview/:page', function(req, res) {
 	var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
 	var data = req.body.content;
 	data = data.replace(redirect, " * 리다이렉트 [[$1]]");
-	parseNamu(req, data, function(cnt){
-		var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-		var leftbarcontect;
-		if(leftbarcontect = leftbar.exec(cnt)) {
-			lb = 'block';
+	ip = yourip(req,res);
+	page = req.params.page;
+	stopy = stop(ip);
+	if(stopy) {
+		res.redirect('/ban');
+	}
+	else {	
+		aya = editstop(ip, page);
+		if(aya) {
+			res.redirect('/Access');
 		}
 		else {
-			leftbarcontect = ['',''];
+			parseNamu(req, data, function(cnt){
+				var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
+				var leftbarcontect;
+				if(leftbarcontect = leftbar.exec(cnt)) {
+					lb = 'block';
+				}
+				else {
+					leftbarcontect = ['',''];
+				}
+				res.render('preview', { 
+					lbc: leftbarcontect[1], 
+					lb: lb, 
+					title: req.params.page, 
+					dis2: dis2, 
+					dis3: dis3, 
+					title2: encodeURIComponent(req.params.page), 
+					data: data, 
+					data2: req.body.content, 
+					content: cnt, 
+					wikiname: name 
+				});
+				res.end();
+				return;
+			});
 		}
-		res.render('preview', { 
-			lbc: leftbarcontect[1], 
-			lb: lb, 
-			title: req.params.page, 
-			dis2: dis2, 
-			dis3: dis3, 
-			title2: encodeURIComponent(req.params.page), 
-			data: data, 
-			data2: req.body.content, 
-			content: cnt, 
-			wikiname: name 
-		});
-		res.end();
-		return;
-	});
+	}
 });
  
 // 최근 바뀜을 보여줍니다.
@@ -2250,32 +2265,45 @@ router.get('/edit/:page', function(req, res) {
 	if(encodeURIComponent(req.params.page).length > 255) {
 		res.send('<script type="text/javascript">alert("문서 명이 너무 깁니다.");</script>')
 	}
-			
-	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
-	if(!exists){
-		res.render('edit', { 
-			dis2: dis2, 
-			dis3: dis3,
-			title: req.params.page, 
-			title2: encodeURIComponent(req.params.page), 
-			content: "" , 
-			wikiname: name 
-		});
-		res.end();
-		return;
+	ip = yourip(req,res);
+	page = req.params.page;
+	stopy = stop(ip);
+	if(stopy) {
+		res.redirect('/ban');
 	}
-	else{
-		var data = fs.readFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', 'utf8');
-		res.render('edit', { 
-			dis2: dis2,
-			dis3: dis3,
-			title: req.params.page, 
-			title2: encodeURIComponent(req.params.page), 
-			content: data , 
-			wikiname: name 
-		});
-		res.end();
-		return;
+	else {	
+		aya = editstop(ip, page);
+		if(aya) {
+			res.redirect('/Access');
+		}
+		else {
+			var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
+			if(!exists){
+				res.render('edit', { 
+					dis2: dis2, 
+					dis3: dis3,
+					title: req.params.page, 
+					title2: encodeURIComponent(req.params.page), 
+					content: "" , 
+					wikiname: name 
+				});
+				res.end();
+				return;
+			}
+			else{
+				var data = fs.readFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', 'utf8');
+				res.render('edit', { 
+					dis2: dis2,
+					dis3: dis3,
+					title: req.params.page, 
+					title2: encodeURIComponent(req.params.page), 
+					content: data , 
+					wikiname: name 
+				});
+				res.end();
+				return;
+			}
+		}
 	}
 });
 
