@@ -125,9 +125,10 @@ function stop(ip) {
 			  if(mm<10) {
 				mm='0'+mm;
 			}
-			var today = yyyy+'-' + mm+'-'+dd;
-			today = today.replace(/-/g, '');
+			
+			var today = yyyy + mm + dd;
 			var nowday = day.replace(/-/g, '');
+			
 			if(today === nowday) {
 				fs.unlinkSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 			}
