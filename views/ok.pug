@@ -4,11 +4,10 @@ block content
     nav.menu
       a.menu-item.selected(href='#', onclick='return false') 되돌리기
       a.menu-item(href='/w/' + title2) 문서
-  h1= title + ' (삭제)'
+  h1.title= title
+  h2.title!= '<span style="margin-left:5px"></span>(되돌리기)'
+  br
+  span 정말로 되돌리겠습니까?
   form#usrform(method='POST', action='/revert/' + title2 + '/' + title3)
-    dl.form-group
-      dt
-        label(for="content") 정말로 되돌리겠습니까?
-      dd
-        .form-actions
-           button.btn.btn-primary(type='submit') 되돌리기
+    br
+    button.btn.btn-primary(type='submit') 되돌리기
