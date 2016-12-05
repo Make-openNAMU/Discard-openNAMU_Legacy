@@ -111,6 +111,7 @@ function stop(ip) {
     var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 	if(exists) {
 		var day = fs.readFileSync('./user/' + encodeURIComponent(ip) + '-ban.txt', 'utf8');
+		
 		if(day === '') {
 			return 'test';
 		}
@@ -165,7 +166,7 @@ function admin(ip) {
 function mine(ip) {
 	var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-mine.txt');
 	if(!exists) {
-		res.send('<script type="text/javascript">alert("소유자가 아닙니다.");</script>')
+		return 'test';
 	}
 }
 
@@ -1035,15 +1036,20 @@ router.post('/ban/:ip', function(req, res) {
 // 어드민 부여
 router.get('/admin/:ip', function(req, res) {
 	ip = yourip(req,res);
-	mine(ip);
-	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
-	if(exists) {
-		fs.unlinkSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
+	var test = mine(ip);
+	if(test) {
+		res.redirect('/Access');
 	}
 	else {
-		fs.openSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt','w+');
+		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
+		if(exists) {
+			fs.unlinkSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
+		}
+		else {
+			fs.openSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt','w+');
+		}
+		res.redirect('/w/');
 	}
-	res.redirect('/w/');
 });
  
 // 밴 리스트
