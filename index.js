@@ -136,8 +136,19 @@ function loginy(req,res) {
 	var cookies = new Cookies( req, res )
 	, AqoursGanbaRuby, WikiID
 	
-	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
-		dis2 = 'none';
+	if(cookies.get( "WikiID" ) === '') {
+		if(cookies.get( "AqoursGanbaRuby" ) === '') {}
+		else {
+			dis2 = 'none';
+		}
+	}
+	else {
+		if(cookies.get( "WikiID" )) {
+			dis2 = 'none';
+		}
+		else if(cookies.get( "AqoursGanbaRuby" )) {
+			dis2 = 'none';
+		}
 	}
 	return dis2;
 }
@@ -147,8 +158,14 @@ function loginny(req,res) {
 	var cookies = new Cookies( req, res )
 	, AqoursGanbaRuby, WikiID
 	
-	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
-		dis3 = 'inline-block';
+	if(cookies.get( "WikiID" ) === '') {}
+	else if(cookies.get( "AqoursGanbaRuby" ) === '') {}
+	else {
+		if(cookies.get( "WikiID" )) {
+			if(cookies.get( "AqoursGanbaRuby" )) {
+				dis3 = 'inline-block'; 
+			}
+		}
 	}
 	return dis3;
 }
