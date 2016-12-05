@@ -6,13 +6,11 @@ block content
       a.menu-item(href='/w/' + title2) 문서
   h1.title= title
   h2.title!= '<span style="margin-left:5px"></span>(이동)'
+  br
+  span 정말로 이동 하시겠습니까?
   form#usrform(method='POST', action='/move/' + title2)
-    dl.form-group
-      dt
-        label(for="content") 정말로 이동 하시겠습니까?
-      dd
-        br
-        input.form-control.input-sm(type='text', placeholder=title, value=title, name='title')
-        br
-        .form-actions
-           button.btn.btn-primary(type='submit') 문서 이동
+    br
+    input.form-control.input-sm(type='text', placeholder=title, value=title, name='title')
+    br
+    br
+    button.btn.btn-primary(type='submit') 이동

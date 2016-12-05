@@ -6,10 +6,8 @@ block content
       a.menu-item(href='/w/' + title2) 문서
   h1.title= title
   h2.title!= '<span style="margin-left:5px"></span>(삭제)'
+  br
+  span 정말로 삭제 하시겠습니까?
   form#usrform(method='POST', action='/delete/' + title2)
-    dl.form-group
-      dt
-        label(for="content") 정말로 삭제 하시겠습니까?
-      dd
-        .form-actions
-           button.btn.btn-primary(type='submit') 문서 삭제
+    br
+    button.btn.btn-primary(type='submit') 삭제
