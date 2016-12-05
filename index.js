@@ -12,7 +12,6 @@ var sha3_512 = require('js-sha3').sha3_512;
 
 var licen;
 var name;
-var FrontPage;
 var lb;
 var aya;
 var ip;
@@ -43,22 +42,6 @@ function rname(name) {
 		name = "오픈나무";
 	}
 	return name;
-}
-
-// 대문
-function rFrontPage(FrontPage) {
-	var exists = fs.existsSync('./setting/FrontPage.txt');
-	if(exists) {
-		var test = /%0A$/;
-		FrontPage = fs.readFileSync('./setting/FrontPage.txt', 'utf8');
-		if(test.exec(FrontPage)) {
-			FrontPage = FrontPage.replace(test, '');
-		}
-	}
-	else {
-		FrontPage = "FrontPage";
-	}
-	return FrontPage;
 }
 
 // 시간
@@ -377,7 +360,18 @@ router.post('/login', function(req, res) {
 
 // 대문으로
 router.get('/', function(req, res) {
-	FrontPage = rFrontPage(FrontPage);
+	var FrontPage;
+	var exists = fs.existsSync('./setting/FrontPage.txt');
+	if(exists) {
+		var test = /%0A$/;
+		FrontPage = fs.readFileSync('./setting/FrontPage.txt', 'utf8');
+		if(test.exec(FrontPage)) {
+			FrontPage = FrontPage.replace(test, '');
+		}
+	}
+	else {
+		FrontPage = "FrontPage";
+	}
 	res.redirect('/w/'+encodeURIComponent(FrontPage));
 });
 
@@ -1109,8 +1103,7 @@ router.get('/acl/:page', function(req, res) {
 
 // 리다이렉트.
 router.get('/w/', function(req, res) {
-	FrontPage = rFrontPage(FrontPage);
-	res.redirect('/w/'+encodeURIComponent(FrontPage));
+	res.redirect('/');
 });
 
 // ver
