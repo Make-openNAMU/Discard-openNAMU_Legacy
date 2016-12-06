@@ -106,7 +106,6 @@ function yourip(req, res) {
 
 // 밴
 function stop(ip) {
-	console.log(ip);
     var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 	if(exists) {
 		var day = fs.readFileSync('./user/' + encodeURIComponent(ip) + '-ban.txt', 'utf8');
@@ -144,7 +143,6 @@ function stop(ip) {
 		var test = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?$/;
 		var test2 = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/;
 		var test3;
-		console.log(test.exec(ip));
 		if(test.exec(ip)) {
 			test3 = test2.exec(ip);
 			
