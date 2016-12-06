@@ -1170,7 +1170,9 @@ router.get('/ban', function(req, res) {
 	var shine = 0;
 	var ganba;
 	var ruby = '<div>';
+	var ruby2 = '<div>';
 	var dayo = /([^-]*)-ban\.txt/;
+	var des = /([^-]*)-allban\.txt/;
 	var hehe;
 	while(true) {
 		if(sun[shine]) {
@@ -1184,9 +1186,18 @@ router.get('/ban', function(req, res) {
 					ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
 				}
 			}
+			else if(ganba = des.exec(hehe)) {
+				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
+				if(day === '') {
+					ruby2 = ruby2 + '<li>' + ganba[1] + '</li>';
+				}
+				else {
+					ruby2 = ruby2 + '<li>' + ganba[1] + ' : ' + day + '</li>';
+				}
+			}
 		}
 		else {
-			ruby = ruby + '</div><p><li>만약 기한이 지났는데 밴 목록에 있다면 그 사람이 그 이후로 편집등 행위를 하지 않았음을 의미 합니다. 해제 된 건 맞습니다.</li><li>만약 기한이 적혀 있지 않다면 무기 차단 입니다.</li><li>만약 편집등의 행위를 하려 했으나 여기로 온 경우라면 차단 목록에 자신이 있지 않나 확인 해 보세요.</li></p>';
+			ruby = ruby + '</div>' + ruby2 + '</div><p><li>만약 기한이 지났는데 밴 목록에 있다면 그 사람이 그 이후로 편집등 행위를 하지 않았음을 의미 합니다. 해제 된 건 맞습니다.</li><li>만약 기한이 적혀 있지 않다면 무기 차단 입니다.</li><li>만약 편집등의 행위를 하려 했으나 여기로 온 경우라면 차단 목록에 자신이 있지 않나 확인 해 보세요.</li></p>';
 			break;
 		}
 		shine = shine + 1;
