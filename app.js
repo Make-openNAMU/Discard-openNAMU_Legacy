@@ -88,7 +88,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /* Print Message on Server console */
-console.log("Open Wiki Namu Engine Test engine is now active\n\n");
+console.log("OpenNamu Engine is now active\n\n");
 console.log("Running on Port "+ port );
 
 /**
