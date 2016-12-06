@@ -1008,7 +1008,7 @@ router.post('/topic/:page/:topic', function(req, res) {
 
 // 대역 밴 겟
 router.get('/allban/:ip', function(req, res) {
-	/^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/
+	test = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/;
 	if(test.exec(req.params.ip)) {
 		name = rname(name);
 		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
@@ -1180,6 +1180,14 @@ router.get('/ban', function(req, res) {
 			if(ganba = dayo.exec(hehe)) {
 				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
 				if(day === '') {
+					if(day === '') {
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
+					}
+					else {
+						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
+					}
+				}
+				else {
 					var today = new Date();
 					var dd = today.getDate();
 					var mm = today.getMonth()+1; 
@@ -1207,20 +1215,20 @@ router.get('/ban', function(req, res) {
 						else {
 							ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
 						}
-					}
-				}
-				else {
-					if(day === '') {
-							ruby = ruby + '<li>' + ganba[1] + '</li>';
-					}
-					else {
-						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
 					}
 				}
 			}
 			else if(ganba = des.exec(hehe)) {
 				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
-				if(day === '')
+				if(day === '') {
+					if(day === '') {
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
+					}
+					else {
+						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
+					}
+				}
+				else {
 					var today = new Date();
 					var dd = today.getDate();
 					var mm = today.getMonth()+1; 
@@ -1248,14 +1256,6 @@ router.get('/ban', function(req, res) {
 						else {
 							ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
 						}
-					}
-				}
-				else {
-					if(day === '') {
-							ruby = ruby + '<li>' + ganba[1] + '</li>';
-					}
-					else {
-						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
 					}
 				}
 			}
