@@ -595,7 +595,7 @@ router.get('/setup', function(req, res) {
 	}
 	var exists = fs.existsSync('./data/');
 	if(!exists) {
-		fs.mkdirSync('./data', 0754;
+		fs.mkdirSync('./data', 0754);
 	}
 	var exists = fs.existsSync('./recent/');
 	if(!exists) {
