@@ -1593,7 +1593,7 @@ router.post('/move/:page', function(req, res) {
 					var name = req.params.page;
 					rplus(ip, today, name, rtitle);
 					var i = 0;
-					fs.mkdirSync('./history/' + encodeURIComponent(req.body.title), 777);
+					fs.mkdirSync('./history/' + encodeURIComponent(req.body.title), 0755);
 					while(true) {
 						i = i + 1;
 						var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
