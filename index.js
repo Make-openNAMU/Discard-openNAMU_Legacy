@@ -1024,7 +1024,7 @@ router.get('/allban/:ip', function(req, res) {
 			res.redirect('/Access');
 		}
 		else {
-			res.status(200).render('ban-get', { 
+			res.status(200).render('allban-get', { 
 				enter: nowthat, 
 				title: req.params.ip, 
 				title2: encodeURIComponent(req.params.ip),
@@ -1040,7 +1040,7 @@ router.get('/allban/:ip', function(req, res) {
 });
 
 // 대역 밴 추가
-router.post('/ban/:ip', function(req, res) {
+router.post('/allban/:ip', function(req, res) {
 	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
@@ -1179,27 +1179,39 @@ router.get('/ban', function(req, res) {
 			hehe = decodeURIComponent(sun[shine]);
 			if(ganba = dayo.exec(hehe)) {
 				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
-				var today = new Date();
-				var dd = today.getDate();
-				var mm = today.getMonth()+1; 
-				var yyyy = today.getFullYear();
-				if(dd<10) {
-					dd='0'+dd;
-				}
-				  if(mm<10) {
-					mm='0'+mm;
-				}
-				var today = yyyy + mm + dd;
-				var nowday = day.replace(/-/g, '');
-				if(today === nowday) {
-					fs.unlinkSync('./user/' + sun[shine]);
-				}
-				else if(today > nowday) {
-					fs.unlinkSync('./user/' + sun[shine]);
+				if(day === '')
+					var today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; 
+					var yyyy = today.getFullYear();
+					if(dd<10) {
+						dd='0'+dd;
+					}
+					  if(mm<10) {
+						mm='0'+mm;
+					}
+					var today = yyyy + mm + dd;
+					var nowday = day.replace(/-/g, '');
+					console.log(today);
+					console.log(nowday);
+					if(today === nowday) {
+						fs.unlinkSync('./user/' + sun[shine]);
+					}
+					else if(today > nowday) {
+						fs.unlinkSync('./user/' + sun[shine]);
+					}
+					else {
+						if(day === '') {
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
+						}
+						else {
+							ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
+						}
+					}
 				}
 				else {
 					if(day === '') {
-						ruby = ruby + '<li>' + ganba[1] + '</li>';
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
 					}
 					else {
 						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
@@ -1208,27 +1220,39 @@ router.get('/ban', function(req, res) {
 			}
 			else if(ganba = des.exec(hehe)) {
 				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
-				var today = new Date();
-				var dd = today.getDate();
-				var mm = today.getMonth()+1; 
-				var yyyy = today.getFullYear();
-				if(dd<10) {
-					dd='0'+dd;
-				}
-				  if(mm<10) {
-					mm='0'+mm;
-				}
-				var today = yyyy + mm + dd;
-				var nowday = day.replace(/-/g, '');
-				if(today === nowday) {
-					fs.unlinkSync('./user/' + sun[shine]);
-				}
-				else if(today > nowday) {
-					fs.unlinkSync('./user/' + sun[shine]);
+				if(day === '')
+					var today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; 
+					var yyyy = today.getFullYear();
+					if(dd<10) {
+						dd='0'+dd;
+					}
+					  if(mm<10) {
+						mm='0'+mm;
+					}
+					var today = yyyy + mm + dd;
+					var nowday = day.replace(/-/g, '');
+					console.log(today);
+					console.log(nowday);
+					if(today === nowday) {
+						fs.unlinkSync('./user/' + sun[shine]);
+					}
+					else if(today > nowday) {
+						fs.unlinkSync('./user/' + sun[shine]);
+					}
+					else {
+						if(day === '') {
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
+						}
+						else {
+							ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
+						}
+					}
 				}
 				else {
 					if(day === '') {
-						ruby = ruby + '<li>' + ganba[1] + '</li>';
+							ruby = ruby + '<li>' + ganba[1] + '</li>';
 					}
 					else {
 						ruby = ruby + '<li>' + ganba[1] + ' : ' + day + '</li>';
