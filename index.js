@@ -139,6 +139,48 @@ function stop(ip) {
 			}
 		}
 	}
+	else {
+		var test = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]\.[0-9][0-9][0-9]\.[0-9][0-9][0-9]$/;
+		var test2 = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]/;
+		var test3;
+		if(test.exec(ip)) {
+			test3 = test2.exec(ip);
+			
+			var exists = fs.existsSync('./user/' + encodeURIComponent(test3) + '-allban.txt');
+			if(exists) {
+				var day = fs.readFileSync('./user/' + encodeURIComponent(test3) + '-allban.txt', 'utf8');
+		
+				if(day === '') {
+					return 'test';
+				}
+				else {
+					var today = new Date();
+					var dd = today.getDate();
+					var mm = today.getMonth()+1; 
+					var yyyy = today.getFullYear();
+					if(dd<10) {
+						dd='0'+dd;
+					}
+					  if(mm<10) {
+						mm='0'+mm;
+					}
+					
+					var today = yyyy + mm + dd;
+					var nowday = day.replace(/-/g, '');
+					
+					if(today === nowday) {
+						fs.unlinkSync('./user/' + encodeURIComponent(test3) + '-allban.txt');
+					}
+					else if(today > nowday) {
+						fs.unlinkSync('./user/' + encodeURIComponent(test3) + '-allban.txt');
+					}
+					else {
+						return 'test';
+					}
+				}
+			}
+		}
+	}
 }
 
 // acl
@@ -966,28 +1008,73 @@ router.post('/topic/:page/:topic', function(req, res) {
 
 // 대역 밴 겟
 router.get('/allban/:ip', function(req, res) {
-	name = rname(name);
-	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
-	if(exists) {
-		var nowthat = '차단 해제';
+	var test = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]$/;
+	if(test.exec(req.params.ip)) {
+		name = rname(name);
+		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
+		if(exists) {
+			var nowthat = '차단 해제';
+		}
+		else {
+			var nowthat = '차단';
+		}
+		ip = yourip(req,res);
+		aya = admin(ip);
+		if(aya) {
+			res.redirect('/Access');
+		}
+		else {
+			res.status(200).render('ban-get', { 
+				enter: nowthat, 
+				title: req.params.ip, 
+				title2: encodeURIComponent(req.params.ip),
+				wikiname: name 
+			});
+			res.end();
+			return;
+		}
 	}
 	else {
-		var nowthat = '차단';
+		res.redirect('/ban/' + req.params.ip);
 	}
+});
+
+// 대역 밴 추가
+router.post('/ban/:ip', function(req, res) {
 	ip = yourip(req,res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
-		res.status(200).render('ban-get', { 
-			enter: nowthat, 
-			title: req.params.ip, 
-			title2: encodeURIComponent(req.params.ip),
-			wikiname: name 
-		});
-		res.end();
-		return;
+		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
+		if(!exists) {
+			var day;
+			var main = /^([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])$/;
+			if(day = main.exec(req.body.ip)) {
+				var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
+				if(exists) {
+					res.redirect('/adminstop');
+				}
+				else {
+					fs.openSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt','w+');
+					fs.writeFileSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt', day[1], 'utf8');
+				}
+			}
+			else {
+				var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-admin.txt');
+				if(exists) {
+					res.redirect('/adminstop');
+				}
+				else {
+					fs.openSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt','w');
+				}
+			}
+		}
+		else {
+			fs.unlinkSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
+		}
+		res.redirect('/');
 	}
 });
  
@@ -1053,7 +1140,7 @@ router.post('/ban/:ip', function(req, res) {
 		else {
 			fs.unlinkSync('./user/' + encodeURIComponent(req.params.ip) + '-ban.txt');
 		}
-		res.redirect('/w/');
+		res.redirect('/');
 	}
 });
  
