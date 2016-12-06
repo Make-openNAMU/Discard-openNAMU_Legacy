@@ -587,27 +587,27 @@ router.get('/setup', function(req, res) {
 	FrontPage = 'FrontPage';
 	var exists = fs.existsSync('./user/');
 	if(!exists) {
-		fs.mkdirSync('./user', 777);
+		fs.mkdirSync('./user', 0754);
 	}
 	var exists = fs.existsSync('./topic/');
 	if(!exists) {
-		fs.mkdirSync('./topic', 777);
+		fs.mkdirSync('./topic', 0754);
 	}
 	var exists = fs.existsSync('./data/');
 	if(!exists) {
-		fs.mkdirSync('./data', 777);
+		fs.mkdirSync('./data', 0754;
 	}
 	var exists = fs.existsSync('./recent/');
 	if(!exists) {
-		fs.mkdirSync('./recent', 777);
+		fs.mkdirSync('./recent', 0754);
 	}
 	var exists = fs.existsSync('./setting/');
 	if(!exists) {
-		fs.mkdirSync('./setting', 777);
+		fs.mkdirSync('./setting', 0754);
 	}
 	var exists = fs.existsSync('./history/');
 	if(!exists) {
-		fs.mkdirSync('./history', 777);
+		fs.mkdirSync('./history', 0754);
 	}
 	var exists = fs.existsSync('./recent/RC-number.txt');
 	if(!exists) {
