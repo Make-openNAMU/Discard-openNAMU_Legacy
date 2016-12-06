@@ -1179,7 +1179,7 @@ router.get('/ban', function(req, res) {
 			hehe = decodeURIComponent(sun[shine]);
 			if(ganba = dayo.exec(hehe)) {
 				var day = fs.readFileSync('./user/' + sun[shine], 'utf8');
-				if(day === '')
+				if(day === '') {
 					var today = new Date();
 					var dd = today.getDate();
 					var mm = today.getMonth()+1; 
