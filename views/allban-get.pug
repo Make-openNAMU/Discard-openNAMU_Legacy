@@ -1,7 +1,7 @@
 extends wiki  
 block content
   h1.title= title
-  form#usrform(method='POST', action='/ban/' + title2)
+  form#usrform(method='POST', action='/allban/' + title2)
     input.form-control.input-sm(type='text', name='ip')
     br
     br

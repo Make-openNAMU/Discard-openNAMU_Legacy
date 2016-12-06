@@ -88,8 +88,10 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /* Print Message on Server console */
-console.log("OpenNamu Engine is now active\n\n");
-console.log("Running on Port "+ port );
+
+console.log("OpenNamu Engine is now active");
+console.log("Running on Port "+ port +"\n");
+
 
 /**
  * Normalize a port into a number, string, or false.
