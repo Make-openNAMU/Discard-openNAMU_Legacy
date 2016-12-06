@@ -2546,7 +2546,7 @@ router.post('/edit/:page', function(req, res) {
 						fs.writeFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', req.body.content, 'utf8');
 						var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt');
 						if(!exists) {
-							fs.mkdirSync('./history/' + encodeURIComponent(req.params.page), 777);
+							fs.mkdirSync('./history/' + encodeURIComponent(req.params.page), 0755);
 							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt','w+');
 							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt', req.body.content, 'utf8');
 							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-ip.txt','w+');
