@@ -1,14 +1,17 @@
 extends wiki  
 block content
-  h1= title
+  h1.title= title
   form#usrform(method='POST', action='/ban/' + title2)
-    dl.form-group
-      dd
-        br
-        input.form-control.input-sm(type='text', name='ip')
-        br
-        p= '아무것도 안 적으면 무기 차단'
-        p= '차단 일 지정시 형식은 YYYY-MM-DD로 기록 바람'
-        p= '차단 해제시 아무것도 적지 마시오'
-        .form-actions
-           button.btn.btn-primary(type='submit')= enter
+    input.form-control.input-sm(type='text', name='ip')
+    br
+    br
+    span 아무것도 안 적으면 무기 차단
+    br    
+    br
+    span 차단 일 지정시 형식은 YYYY-MM-DD로 기록 바람
+    br
+    br
+    span 차단 해제시 아무것도 적지 마시오
+    br
+    br
+    button.btn.btn-primary(type='submit')= enter

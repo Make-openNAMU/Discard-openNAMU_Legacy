@@ -967,7 +967,7 @@ router.post('/topic/:page/:topic', function(req, res) {
 // 대역 밴 겟
 router.get('/allban/:ip', function(req, res) {
 	name = rname(name);
-	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-ban.txt');
+	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
 	if(exists) {
 		var nowthat = '차단 해제';
 	}
