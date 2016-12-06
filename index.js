@@ -125,7 +125,8 @@ function stop(ip) {
 				mm='0'+mm;
 			}
 			
-			var today = yyyy + mm + dd;
+			var today = yyyy + '-' + mm + '-' + dd;
+			today = today.replace(/-/g, '');
 			var nowday = day.replace(/-/g, '');
 			
 			if(today === nowday) {
@@ -165,7 +166,8 @@ function stop(ip) {
 						mm='0'+mm;
 					}
 					
-					var today = yyyy + mm + dd;
+					var today = yyyy + '-' + mm + '-' + dd;
+					today = today.replace(/-/g, '');
 					var nowday = day.replace(/-/g, '');
 					
 					if(today === nowday) {
@@ -1198,7 +1200,8 @@ router.get('/ban', function(req, res) {
 					  if(mm<10) {
 						mm='0'+mm;
 					}
-					var today = yyyy + mm + dd;
+					var today = yyyy + '-' + mm + '-' + dd;
+					today = today.replace(/-/g, '');
 					var nowday = day.replace(/-/g, '');
 					console.log(today);
 					console.log(nowday);
@@ -1239,10 +1242,9 @@ router.get('/ban', function(req, res) {
 					  if(mm<10) {
 						mm='0'+mm;
 					}
-					var today = yyyy + mm + dd;
+					var today = yyyy + '-' + mm + '-' + dd;
+					today = today.replace(/-/g, '');
 					var nowday = day.replace(/-/g, '');
-					console.log(today);
-					console.log(nowday);
 					if(today === nowday) {
 						fs.unlinkSync('./user/' + sun[shine]);
 					}
