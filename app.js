@@ -87,6 +87,10 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+/* Print Message on Server console */
+console.log("Open Wiki Namu Engine Test engine is now active\n\n");
+console.log("Running on Port "+ port );
+
 /**
  * Normalize a port into a number, string, or false.
  */
