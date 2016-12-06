@@ -106,6 +106,7 @@ function yourip(req, res) {
 
 // 밴
 function stop(ip) {
+	console.log(ip);
     var exists = fs.existsSync('./user/' + encodeURIComponent(ip) + '-ban.txt');
 	if(exists) {
 		var day = fs.readFileSync('./user/' + encodeURIComponent(ip) + '-ban.txt', 'utf8');
@@ -140,9 +141,10 @@ function stop(ip) {
 		}
 	}
 	else {
-		var test = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]\.[0-9][0-9][0-9]\.[0-9][0-9][0-9]$/;
-		var test2 = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]/;
+		var test = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?$/;
+		var test2 = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/;
 		var test3;
+		console.log(test.exec(ip));
 		if(test.exec(ip)) {
 			test3 = test2.exec(ip);
 			
@@ -1008,7 +1010,7 @@ router.post('/topic/:page/:topic', function(req, res) {
 
 // 대역 밴 겟
 router.get('/allban/:ip', function(req, res) {
-	var test = /^[0-9][0-9][0-9]\.[0-9][0-9][0-9]$/;
+	/^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/
 	if(test.exec(req.params.ip)) {
 		name = rname(name);
 		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
