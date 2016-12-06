@@ -15,8 +15,6 @@ var name;
 var lb;
 var aya;
 var ip;
-var dis2;
-var dis3;
 var stopy;
 var page;
 
@@ -1143,9 +1141,7 @@ router.post('/search', function(req, res) {
 // diff
 router.get('/diff/:page/:r/:rr', function(req, res) {
 	licen = rlicen(licen);
-	name = rname(name);
-	dis2 = loginy(req,res);
-	
+	name = rname(name);	
 	var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page)+'/r1.txt');
 	if(exists) {
@@ -1187,8 +1183,6 @@ router.get('/diff/:page/:r/:rr', function(req, res) {
 router.get('/revert/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	dis2 = loginy(req,res);
-	
 	ip = yourip(req,res);
 	page = req.params.page;
 	var title2 = encodeURIComponent(req.params.page);
@@ -1557,8 +1551,6 @@ router.get('/w/:page/redirect/:rdrc', function(req, res) {
 	    var dis = 'none';
 	    lovelive = req.params.page;
     }
-    dis2 = loginy(req,res);
-	
     var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 	if(!exists) {
