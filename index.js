@@ -2761,6 +2761,9 @@ router.get('/history/:page', function(req, res) {
 			if(exists) {
 				today = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', 'utf8');
 			}
+			else {
+				today = '';
+			}
 			
 			var send;
 			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt');
