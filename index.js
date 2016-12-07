@@ -9,6 +9,7 @@ var Cokies = require( "js-cookie" );
 var Cookies = require( "cookies" );
 var bcrypt = require('bcrypt-nodejs');
 var sha3_512 = require('js-sha3').sha3_512;
+var jsonfile = require('jsonfile');
 
 var licen;
 var name;
