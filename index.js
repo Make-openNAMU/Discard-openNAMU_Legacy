@@ -2675,7 +2675,7 @@ router.get('/history/w/:page/:r', function(req, res) {
 			else {
 				leftbarcontect = ['',''];
 			}
-			res.status(200).render('history', { 
+			res.status(200).render('history-w', { 
 				lbc: leftbarcontect[1],
 				lb: lb,
 				title: req.params.page, 
@@ -2690,7 +2690,7 @@ router.get('/history/w/:page/:r', function(req, res) {
 		});
 	}
 	else {
-		res.status(404).render('history', { 
+		res.status(404).render('history-w', { 
 			title: req.params.page, 
 			title2: '<span style="margin-left:5px"></span>(' + req.params.r + ')', 
 			title3: title3, 
