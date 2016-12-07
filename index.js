@@ -403,6 +403,7 @@ router.post('/login', function(req, res) {
 router.get('/', function(req, res) {
 	var exists = fs.existsSync('./setting/FrontPage.txt');
 	if(exists) {
+		var test = /%0A$/;
 		var FrontPage = fs.readFileSync('./setting/FrontPage.txt', 'utf8');
 		
 		FrontPage = FrontPage.replace(test, '');
