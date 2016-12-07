@@ -1080,7 +1080,6 @@ router.get('/allban/:ip', function(req, res) {
 // 대역 밴 추가
 router.post('/allban/:ip', function(req, res) {
 	ip = yourip(req, res);
-	
     aya = admin(ip);
 	
 	if(aya) {
@@ -1121,19 +1120,23 @@ router.post('/allban/:ip', function(req, res) {
 // 밴 겟
 router.get('/ban/:ip', function(req, res) {
 	name = rname(name);
-	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-ban.txt');
-	if(exists) {
-		var nowthat = '차단 해제';
-	}
-	else {
-		var nowthat = '차단';
-	}
+	
 	ip = yourip(req, res);
-    aya = admin(ip);
+	aya = admin(ip);
+	
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
+		var nowthat;
+		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-ban.txt');
+		if(exists) {
+			nowthat = '차단 해제';
+		}
+		else {
+			nowthat = '차단';
+		}
+	
 		res.status(200).render('ban-get', { 
 			enter: nowthat, 
 			title: req.params.ip, 
@@ -1149,6 +1152,7 @@ router.get('/ban/:ip', function(req, res) {
 router.post('/ban/:ip', function(req, res) {
 	ip = yourip(req, res);
     aya = admin(ip);
+	
 	if(aya) {
 		res.redirect('/Access');
 	}
@@ -1187,8 +1191,9 @@ router.post('/ban/:ip', function(req, res) {
 // 어드민 부여
 router.get('/admin/:ip', function(req, res) {
 	ip = yourip(req, res);
-	var test = mine(ip);
-	if(test) {
+	aya = mine(ip);
+	
+	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
@@ -1206,14 +1211,20 @@ router.get('/admin/:ip', function(req, res) {
 // 밴 리스트
 router.get('/ban', function(req, res) {
 	name = rname(name);
+	
 	var sun = fs.readdirSync('./user');
+	
 	var shine = 0;
-	var ganba;
+	
 	var ruby = '<div>';
 	var ruby2 = '<div>';
+	
 	var dayo = /([^-]*)-ban\.txt/;
 	var des = /([^-]*)-allban\.txt/;
+	
 	var hehe;
+	var ganba;
+	
 	while(true) {
 		if(sun[shine]) {
 			hehe = decodeURIComponent(sun[shine]);
@@ -1232,17 +1243,19 @@ router.get('/ban', function(req, res) {
 					var dd = today.getDate();
 					var mm = today.getMonth()+1; 
 					var yyyy = today.getFullYear();
+					
 					if(dd<10) {
 						dd='0'+dd;
 					}
 					  if(mm<10) {
 						mm='0'+mm;
 					}
+					
 					var today = yyyy + '-' + mm + '-' + dd;
 					today = today.replace(/-/g, '');
+					
 					var nowday = day.replace(/-/g, '');
-					console.log(today);
-					console.log(nowday);
+
 					if(today === nowday) {
 						fs.unlinkSync('./user/' + sun[shine]);
 					}
@@ -1274,15 +1287,19 @@ router.get('/ban', function(req, res) {
 					var dd = today.getDate();
 					var mm = today.getMonth()+1; 
 					var yyyy = today.getFullYear();
+					
 					if(dd<10) {
 						dd='0'+dd;
 					}
 					  if(mm<10) {
 						mm='0'+mm;
 					}
+					
 					var today = yyyy + '-' + mm + '-' + dd;
 					today = today.replace(/-/g, '');
+					
 					var nowday = day.replace(/-/g, '');
+					
 					if(today === nowday) {
 						fs.unlinkSync('./user/' + sun[shine]);
 					}
@@ -1330,6 +1347,7 @@ router.get('/acl/:page', function(req, res) {
 		else {
 			fs.openSync('./data/' + encodeURIComponent(req.params.page) + '-stop.txt','w+');
 		}
+		
 		res.redirect('/w/'+encodeURIComponent(req.params.page));
 	}
 });
@@ -1343,7 +1361,9 @@ router.get('/w/', function(req, res) {
 router.get('/ver', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
+	
 	var neob = fs.readFileSync('./ver.txt', 'utf8');
+	
 	res.status(200).render('ban', { 
 		title: '위키 버전', 
 		content: neob, 
@@ -1370,7 +1390,7 @@ router.post('/search', function(req, res) {
 router.get('/diff/:page/:r/:rr', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);	
-	var title2 = encodeURIComponent(req.params.page);
+	
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page)+'/r1.txt');
 	if(exists) {
 		var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page)+'/'+req.params.r+'.txt');
@@ -1383,10 +1403,8 @@ router.get('/diff/:page/:r/:rr', function(req, res) {
 				var textDiff = diff.main(sc, id);			
 				res.status(200).render('diff', { 
 					title: req.params.page,
-					title2: title2,
+					title2: encodeURIComponent(req.params.page),
 					title3: '<span style="margin-left:5px"></span>(' + req.params.r + ' / ' + req.params.rr + ')',
-					
-					
 					wikiname: name,
 					License: licen,
 					content: diff.prettyHtml(textDiff) 
@@ -1411,44 +1429,45 @@ router.get('/diff/:page/:r/:rr', function(req, res) {
 router.get('/revert/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
+	
 	ip = yourip(req, res);
 	page = req.params.page;
-	var title2 = encodeURIComponent(req.params.page);
-	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/'+ req.params.r +'.txt');
-	if(exists) {
-		aya = editstop(ip, page);
-		if(aya) {
-			res.redirect('/Access');
+	
+	aya = editstop(ip, page);
+	if(aya) {
+		res.redirect('/Access');
+	}
+	else {
+		stopy = stop(ip);
+		if(stopy) {
+			res.redirect('/ban');
 		}
 		else {
-			stopy = stop(ip);
-			if(stopy) {
-				res.redirect('/ban');
-			}
-			else {
+			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/'+ req.params.r +'.txt');
+			if(exists) {
 				res.status(200).render('ok', { 
-					title2: title2,
-					title: req.params.page,
-					
-					
+					title2: encodeURIComponent(req.params.page),
+					title: req.params.page,		
 					wikiname: name,
 					title3: req.params.r 
 				});
 				res.end();
 				return;
 			}
-		}
+			else {
+				res.redirect('/history/' + encodeURIComponent(req.params.page));
+			}
 	}
-	else {
-		res.redirect('/history/' + encodeURIComponent(req.params.page));
 	}
 });
  
 // 되돌리기 2
 router.post('/revert/:page/:r', function(req, res) {
 	name = rname(name);
+	
 	ip = yourip(req, res);
 	page = req.params.page;
+	
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
@@ -1461,10 +1480,12 @@ router.post('/revert/:page/:r', function(req, res) {
 		else {
 			var today = getNow();
 			var rtitle = req.params.r + ' 버전으로 되돌림';
-			var name = req.params.page;
+			var name = req.params.page;		
 			rplus(ip, today, name, rtitle);
+			
 			var revert = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/'+ req.params.r +'.txt');
 			fs.writeFileSync('./data/' + encodeURIComponent(req.params.page) + '.txt', revert, 'utf8');
+			
 			var i = 0;
 			while(true) {
 				i = i + 1;
@@ -1482,6 +1503,7 @@ router.post('/revert/:page/:r', function(req, res) {
 					break;
 				}
 			}
+			
 			res.redirect('/w/'+ encodeURIComponent(req.params.page));
 		}
 	}
@@ -1490,28 +1512,28 @@ router.post('/revert/:page/:r', function(req, res) {
 // 문서 삭제
 router.get('/delete/:page', function(req, res) {
 	name = rname(name);
+	
 	ip = yourip(req, res);
 	page = req.params.page;
-	var today = getNow();
-	var title2 = encodeURIComponent(req.params.page);  
-	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page) + '.txt');
-	if(!exists) {
-		res.redirect('/w/' + encodeURIComponent(req.params.page));
+	
+	aya = editstop(ip, page);
+	if(aya) {
+		res.redirect('/Access');
 	}
 	else {
-		aya = editstop(ip, page);
-		if(aya) {
-			res.redirect('/Access');
+		stopy = stop(ip);
+		if(stopy) {
+			res.redirect('/ban');
 		}
 		else {
-			stopy = stop(ip);
-			if(stopy) {
-				res.redirect('/ban');
+			var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page) + '.txt');
+			if(!exists) {
+				res.redirect('/w/' + encodeURIComponent(req.params.page));
 			}
 			else {
 				res.status(200).render('delete', { 
 					title: req.params.page,
-					title2: title2,
+					title2: encodeURIComponent(req.params.page),
 					wikiname: name
 				});
 				res.end();
@@ -1523,9 +1545,9 @@ router.get('/delete/:page', function(req, res) {
  
 // 문서 삭제 처리
 router.post('/delete/:page', function(req, res) {
-	name = rname(name);
 	ip = yourip(req, res);
 	page = req.params.page;
+	
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
@@ -1539,7 +1561,9 @@ router.post('/delete/:page', function(req, res) {
 			var today = getNow();
 			var rtitle = '문서를 삭제함';
 			var name = req.params.page;
+			
 			rplus(ip, today, name, rtitle);
+			
 			var i = 0;
 			while(true) {
 				var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
@@ -1563,6 +1587,7 @@ router.post('/delete/:page', function(req, res) {
 					break;
 				}
 			}
+			
 			fs.unlinkSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
 			res.redirect('/w/'+ encodeURIComponent(req.params.page));
 		}
@@ -1572,27 +1597,28 @@ router.post('/delete/:page', function(req, res) {
 // 문서 이동
 router.get('/move/:page', function(req, res) {
 	name = rname(name);
+	
 	ip = yourip(req, res);
 	page = req.params.page;
-	var title2 = encodeURIComponent(req.params.page);
-	var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
-	if(!exists) {
-		res.redirect('/w/' + encodeURIComponent(req.params.page));
+	
+	aya = editstop(ip, page);
+	if(aya) {
+		res.redirect('/Access');
 	}
 	else {
-		aya = editstop(ip, page);
-		if(aya) {
-			res.redirect('/Access');
+		stopy = stop(ip);
+		if(stopy) {
+			res.redirect('/ban');
 		}
 		else {
-			stopy = stop(ip);
-			if(stopy) {
-				res.redirect('/ban');
+			var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page)+'.txt');
+			if(!exists) {
+				res.redirect('/w/' + encodeURIComponent(req.params.page));
 			}
 			else {
 				res.status(200).render('move', { 
 					title: req.params.page,
-					title2: title2,
+					title2: encodeURIComponent(req.params.page),
 					wikiname: name 
 				});
 				res.end();
@@ -1604,9 +1630,9 @@ router.get('/move/:page', function(req, res) {
 
 // post
 router.post('/move/:page', function(req, res) {
-	name = rname(name);
 	ip = yourip(req, res);
 	page = req.params.page;
+	
 	aya = editstop(ip, page);
 	if(aya) {
 		res.redirect('/Access');
@@ -1629,9 +1655,12 @@ router.post('/move/:page', function(req, res) {
 				else {
 					var rtitle = '<a href="/w/'+encodeURIComponent(req.body.title)+'">'+req.body.title+'</a> 문서로 문서를 이동함';
 					var name = req.params.page;
+					
 					rplus(ip, today, name, rtitle);
-					var i = 0;
+					
 					fs.mkdirSync('./history/' + encodeURIComponent(req.body.title), 0755);
+					
+					var i = 0;
 					while(true) {
 						i = i + 1;
 						var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
@@ -1663,9 +1692,11 @@ router.post('/move/:page', function(req, res) {
 							break;
 						}
 					}
+					
 					fs.rmdirSync('./history/' + encodeURIComponent(req.params.page));	
 					fs.renameSync('./data/' + encodeURIComponent(req.params.page)+'.txt','./data/' + encodeURIComponent(req.body.title)+'.txt');
 				}
+				
 				res.redirect('/w/'+ encodeURIComponent(req.body.title));
 			}
 		}
