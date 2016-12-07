@@ -2885,7 +2885,7 @@ router.get('/user', function(req, res) {
 	name = rname(name);
 	res.status(200).render('ban', { 
 		title: '유저 메뉴', 
-		content: '<span>' + ip + '</span><br><br><li><a href="/login">로그인</a></li><li><a href="/logout">로그아웃</a></li>', 
+		content: '<span>' + ip + '</span><br><br><li><a href="/login">로그인</a></li><li><a href="/logout">로그아웃</a></li><li><a href="/register">회원가입</a></li>', 
 		wikiname: name 
 	});
 	res.end();
