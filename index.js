@@ -462,16 +462,16 @@ router.get('/user/:user', function(req, res) {
 	    		
 	    parseNamu(req, data, function(cnt){
 		    var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-			var leftbarcontect;
-			if(leftbarcontect = leftbar.exec(cnt)) {
+			var leftbarcontents;
+			if(leftbarcontents = leftbar.exec(cnt)) {
 				lb = 'block';
 			}
 			else {
-				leftbarcontect = ['',''];
+				leftbarcontents = ['',''];
 			}
 			
 			res.status(200).render('user', { 
-				lbc: leftbarcontect[1], 
+				lbc: leftbarcontents[1], 
 				lb: lb, 
 				title: '사용자:' + req.params.user, 
 				dis: 'none', 
@@ -1759,12 +1759,12 @@ router.get('/w/:page', function(req, res) {
 		}
 		parseNamu(req, data, function(cnt){
 			var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-			var leftbarcontect;
-			if(leftbarcontect = leftbar.exec(cnt)) {
+			var leftbarcontents;
+			if(leftbarcontents = leftbar.exec(cnt)) {
 				lb = 'block';
 			}
 			else {
-				leftbarcontect = ['',''];
+				leftbarcontents = ['',''];
 			}
 			var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page) + '-stop.txt');
 			if(exists) {
@@ -1772,7 +1772,7 @@ router.get('/w/:page', function(req, res) {
 			}
 			res.status(200).render('index', { 
 				acl: acl, 
-				lbc: leftbarcontect[1], 
+				lbc: leftbarcontents[1], 
 				lb: lb, 
 				title: req.params.page, 
 				dis: dis, 
@@ -1833,12 +1833,12 @@ router.get('/w/:page/redirect/:rdrc', function(req, res) {
 		}
 		parseNamu(req, data, function(cnt){
 			var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-			var leftbarcontect;
-			if(leftbarcontect = leftbar.exec(cnt)) {
+			var leftbarcontents;
+			if(leftbarcontents = leftbar.exec(cnt)) {
 					lb = 'block';
 			}
 			else {
-				leftbarcontect = ['',''];
+				leftbarcontents = ['',''];
 			}
 			var exists = fs.existsSync('./data/' + encodeURIComponent(req.params.page) + '-stop.txt');
 			if(exists) {
@@ -1846,7 +1846,7 @@ router.get('/w/:page/redirect/:rdrc', function(req, res) {
 			}
 			res.status(200).render('index', { 
 				acl: acl,
-				lbc: leftbarcontect[1],
+				lbc: leftbarcontents[1],
 				lb: lb,
 				title: req.params.page,
 				title2: title2,
@@ -1887,15 +1887,15 @@ router.post('/preview/:page', function(req, res) {
 			else {
 				parseNamu(req, data, function(cnt){
 					var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-					var leftbarcontect;
-					if(leftbarcontect = leftbar.exec(cnt)) {
+					var leftbarcontents;
+					if(leftbarcontents = leftbar.exec(cnt)) {
 						lb = 'block';
 					}
 					else {
-						leftbarcontect = ['',''];
+						leftbarcontents = ['',''];
 					}
 					res.render('preview', { 
-						lbc: leftbarcontect[1], 
+						lbc: leftbarcontents[1], 
 						lb: lb, 
 						title: req.params.page, 
 						title2: encodeURIComponent(req.params.page), 
@@ -2668,15 +2668,15 @@ router.get('/history/w/:page/:r', function(req, res) {
 		}
 		parseNamu(req, neob, function(cnt){
 			var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
-			var leftbarcontect;
-			if(leftbarcontect = leftbar.exec(cnt)) {
+			var leftbarcontents;
+			if(leftbarcontents = leftbar.exec(cnt)) {
 				lb = 'block';
 			}
 			else {
-				leftbarcontect = ['',''];
+				leftbarcontents = ['',''];
 			}
 			res.status(200).render('history-w', { 
-				lbc: leftbarcontect[1],
+				lbc: leftbarcontents[1],
 				lb: lb,
 				title: req.params.page, 
 				title3: title3, 
@@ -2957,7 +2957,7 @@ router.get('/other', function(req, res) {
 	name = rname(name);
 	res.status(200).render('ban', { 
 		title: '기타 메뉴', 
-		content: '<li><a href="/ver">위키 버전</a></li><li><a href="/titleindex">모든 문서</a></li>', 
+		content: '<li><a href="/ver">위키 버전</a></li><li><a href="/titleindex">모든 문서</a><li><a href="/namumark">문법 설명</a></li>', 
 		wikiname: name 
 	});
 	res.end();
@@ -2972,6 +2972,23 @@ router.get('/user', function(req, res) {
 		title: '유저 메뉴', 
 		content: '<span>' + ip + '</span><br><br><li><a href="/login">로그인</a></li><li><a href="/logout">로그아웃</a></li><li><a href="/register">회원가입</a></li>', 
 		wikiname: name 
+	});
+	res.end();
+	return;
+});
+
+// namumark 설명
+router.get('/namumark', function(req, res) {
+	licen = rlicen(licen);
+	name = rname(name);
+	
+	var neob = fs.readFileSync('./namumark.txt', 'utf8');
+	
+	res.status(200).render('ban', { 
+		title: '문법 설명', 
+		content: neob, 
+		wikiname: name, 
+		License: licen 
 	});
 	res.end();
 	return;
