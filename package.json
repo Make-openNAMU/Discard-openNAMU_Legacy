@@ -1,6 +1,6 @@
 {
   "name": "openNAMU(OWNET)",
-  "version": "1.2-beta",
+  "version": "1.2.0-beta",
   "private": true,
     "scripts": {
     "start": "forever start ./app.js",
