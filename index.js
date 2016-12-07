@@ -276,30 +276,19 @@ router.get('/register', function(req, res) {
  
 // 가입 하기
 router.post('/register', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
     stopy = stop(ip);
     if(stopy) {
    	  res.redirect('/ban');
     }
 	else {
-		var nope = /\-/;
-		var nnope = /\:/;
-		var nnnope = /\./;
-		var nnnnope = />/;
-		var nnnnnope = /</;
-		if(nope.exec(req.body.id)) {
-			res.redirect('/donotid');
-		}
-		else if(nnope.exec(req.body.id)) {
-			res.redirect('/donotid');
-		}
-		else if(nnnope.exec(req.body.id)) {
-			res.redirect('/donotid');
-		}
-		else if(nnnnope.exec(req.body.id)) {
-			res.redirect('/donotid');
-		}
-		else if(nnnnnope.exec(req.body.id)) {
+		var idnot = new Array(); 
+		idnot[0] = /\-/;
+		idnot[1] = /\:/;
+		idnot[2] = /\./;
+		idnot[3] = />/;
+		idnot[4] = /</;
+		if(idnot[0].exec(req.body.id) || idnot[1].exec(req.body.id) || idnot[2].exec(req.body.id) || idnot[3].exec(req.body.id) || idnot[4].exec(req.body.id)) {
 			res.redirect('/donotid');
 		}
 		else { 
@@ -319,11 +308,14 @@ router.post('/register', function(req, res) {
 router.get('/logout', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
+	
 	var cookies = new Cookies( req, res )
-	, AqoursGanbaRuby, WikiID			
+	, AqoursGanbaRuby, WikiID		
+	
 	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
 		cookies.set( "AqoursGanbaRuby", '' );
 		cookies.set( "WikiID", '' );
+		
 		res.status(200).render('ban', { 
 			title: '로그아웃', 
 			content: "로그아웃 했습니다.", 
@@ -342,10 +334,14 @@ router.get('/logout', function(req, res) {
 router.get('/login', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	ip = yourip(req,res);
+	
+	ip = yourip(req, res);
+	
 	stopy = stop(ip);
+	
 	var cookies = new Cookies( req, res )
 	, AqoursGanbaRuby, WikiID
+	
 	if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
 		res.status(200).render('ban', { 
 			title: '로그인', 
@@ -373,8 +369,10 @@ router.get('/login', function(req, res) {
  
 // 로그인 하기
 router.post('/login', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
+	
 	stopy = stop(ip);
+	
 	if(stopy) {
 		res.redirect('/ban');
 	}
@@ -382,12 +380,11 @@ router.post('/login', function(req, res) {
 		var exists = fs.existsSync('./user/' + encodeURIComponent(req.body.id) + '.txt');
 		if(exists) {
 			var pass = fs.readFileSync('./user/' + encodeURIComponent(req.body.id) + '.txt', 'utf8');
-			var test = sha3_512(req.body.pw);
-			var testby = bcrypt.compareSync(test, pass);
 
-			if(testby === true) {
+			if(bcrypt.compareSync(sha3_512(req.body.pw), pass) === true) {
 				var cookies = new Cookies( req, res )
 				, AqoursGanbaRuby, WikiID
+				
 				cookies.set( "AqoursGanbaRuby", test );
 				cookies.set( "WikiID", encodeURIComponent(req.body.id) );
 			}
@@ -404,14 +401,11 @@ router.post('/login', function(req, res) {
 
 // 대문으로
 router.get('/', function(req, res) {
-	var FrontPage;
 	var exists = fs.existsSync('./setting/FrontPage.txt');
 	if(exists) {
-		var test = /%0A$/;
-		FrontPage = fs.readFileSync('./setting/FrontPage.txt', 'utf8');
-		if(test.exec(FrontPage)) {
-			FrontPage = FrontPage.replace(test, '');
-		}
+		var FrontPage = fs.readFileSync('./setting/FrontPage.txt', 'utf8');
+		
+		FrontPage = FrontPage.replace(test, '');
 	}
 	else {
 		FrontPage = "FrontPage";
@@ -423,7 +417,9 @@ router.get('/', function(req, res) {
 router.get('/Upload', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	ip = yourip(req,res);
+	
+	ip = yourip(req, res);
+	
 	stopy = stop(ip);
 	if(stopy) {
 		res.redirect('/ban');
@@ -442,7 +438,9 @@ router.get('/Upload', function(req, res) {
 router.get('/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
+	
     var title2 = encodeURIComponent(req.params.user);
+	
     var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
     if(!exists) {
 	    res.status(200).render('user', { 
@@ -458,10 +456,9 @@ router.get('/user/:user', function(req, res) {
     }   
     else {
 	    var data = fs.readFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
-	    var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
-	    if(redirect.exec(data)) {
-			data = data.replace(redirect, " * 리다이렉트 [[$1]]");
-	    }
+		
+		data = data.replace(/^#(?:넘겨주기|redirect)\s([^\n]*)/ig, " * 리다이렉트 [[$1]]");
+	    		
 	    parseNamu(req, data, function(cnt){
 		    var leftbar = /<div id="toc">(((?!\/div>).)*)<\/div>/;
 			var leftbarcontect;
@@ -471,6 +468,7 @@ router.get('/user/:user', function(req, res) {
 			else {
 				leftbarcontect = ['',''];
 			}
+			
 			res.status(200).render('user', { 
 				lbc: leftbarcontect[1], 
 				lb: lb, 
@@ -491,9 +489,13 @@ router.get('/user/:user', function(req, res) {
 router.get('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
-	stopy = stop(ip);
+	
+	ip = yourip(req, res);
+	
     var title2 = encodeURIComponent(req.params.user);
-	ip = yourip(req,res);
+	
+	stopy = stop(ip);
+	
 	var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
 	if(!exists) {
 		if(stopy) {
@@ -534,24 +536,28 @@ router.get('/edit/user/:user', function(req, res) {
 router.post('/edit/user/:user', function(req, res) {
     licen = rlicen(licen);
     name = rname(name);
+	
+	ip = yourip(req, res);
+    
     var title2 = encodeURIComponent(req.params.user);
-    ip = yourip(req,res);
-    stopy = stop(ip);
+
+	stopy = stop(ip);
     if(stopy) {
 	    res.redirect('/ban');
     }
     else {
 		var cookies = new Cookies( req, res )
 		, AqoursGanbaRuby, WikiID
+		
 		if(cookies.get( "WikiID" ) && cookies.get( "AqoursGanbaRuby" )) {
 			id = cookies.get( "WikiID" );
 			pw = cookies.get( "AqoursGanbaRuby" );
+			
 			var exists = fs.existsSync('./user/' + id + '.txt');
 			if(exists) {
 				var pass = fs.readFileSync('./user/' + id + '.txt', 'utf8');
-				var test = pw;
-				var testby = bcrypt.compareSync(test, pass);
-				if(testby === true) {
+				
+				if(bcrypt.compareSync(pw, pass) === true) {
 					if(encodeURIComponent(req.params.user) === id) {
 						var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt');
 						if(exists) {
@@ -561,6 +567,7 @@ router.post('/edit/user/:user', function(req, res) {
 							fs.openSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt','w+');
 							fs.writeFileSync('./user/' + encodeURIComponent(req.params.user) + '-page.txt', req.body.content, 'utf8');
 						}
+						
 						res.redirect('/user/'+encodeURIComponent(req.params.user));
 					}
 					else {
@@ -585,6 +592,7 @@ router.get('/setup', function(req, res) {
 	licen = 'CC ZERO';
 	name = '오픈나무';
 	FrontPage = 'FrontPage';
+	
 	var exists = fs.existsSync('./user/');
 	if(!exists) {
 		fs.mkdirSync('./user', 0754);
@@ -717,7 +725,8 @@ router.post('/topic/:page', function(req, res) {
 
 // 토론 블라인드
 router.get('/topic/:page/:topic/b:number', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
+	
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -725,6 +734,7 @@ router.get('/topic/:page/:topic/b:number', function(req, res) {
 	else {
 		var file = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic);
 		var sfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/starter.txt';
+		
 		var exists = fs.existsSync(sfile);
 		if(!exists) {
 			res.redirect('/topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic));
@@ -740,8 +750,9 @@ router.get('/topic/:page/:topic/b:number', function(req, res) {
 					fs.unlinkSync(file + '/' + req.params.number + '-stop.txt');
 				}
 				else {
-					fs.openSync(file + '/' + req.params.number + '-stop.txt','w');
+					fs.openSync(file + '/' + req.params.number + '-stop.txt','w+');
 				}
+				
 				res.redirect('/topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic));
 			}
 		}
@@ -751,13 +762,16 @@ router.get('/topic/:page/:topic/b:number', function(req, res) {
 // 토론 정지
 router.get('/topic/:page/:topic/stop', function(req, res) {
 	name = rname(name);
-	ip = yourip(req,res);
+	
+	ip = yourip(req, res);
+	
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
 	}
 	else {
 		var sfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/stop.txt';
+		
 		var exists = fs.existsSync(sfile);
 		if(!exists) {
 			fs.openSync(sfile,'w+');
@@ -765,6 +779,7 @@ router.get('/topic/:page/:topic/stop', function(req, res) {
 		else {
 			fs.unlinkSync(sfile);
 		}
+		
 		res.redirect('/topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic))
 	}
 });
@@ -776,14 +791,18 @@ router.get('/topic/:page/:topic', function(req, res) {
 	else {
 		licen = rlicen(licen);
 		name = rname(name);
+		
 		var admin = yourip(req, res);
+		
 		var title2 = encodeURIComponent(req.params.page);
 		var title3 = encodeURIComponent(req.params.topic);
+		
 		var file = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic);
 		var sfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/starter.txt';
 		var nfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/number.txt';
 		var rfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/';
 		var stfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/stop.txt';
+		
 		var exists = fs.existsSync(rfile);
 		if(!exists) {
 			var toronstop = '';		
@@ -800,11 +819,12 @@ router.get('/topic/:page/:topic', function(req, res) {
 			return;
 		}
 		else {
-			var number = fs.readFileSync(nfile, 'utf8');
-			number = Number(number);
+			var number = Number(fs.readFileSync(nfile, 'utf8'));
 			var starter = fs.readFileSync(sfile, 'utf8');
+			
 			var i = 0;
 			var add = '<div id="new_game">';
+			
 			var exists = fs.existsSync('./user/' + admin + '-admin.txt');
 			if(exists) {
 				var exists = fs.existsSync(stfile);
@@ -820,14 +840,19 @@ router.get('/topic/:page/:topic', function(req, res) {
 				  
 				if(number === i) {
 					add = add + '</div>';
+					
 					break;
 				}
 				else {
-					var data = htmlencode.htmlEncode(fs.readFileSync(file + '/' + i + '.txt', 'utf8'));
 					ip = fs.readFileSync(file + '/' + i + '-ip.txt', 'utf8');
+					var data = htmlencode.htmlEncode(fs.readFileSync(file + '/' + i + '.txt', 'utf8'));
+					
 					var today = fs.readFileSync(file + '/' + i + '-today.txt', 'utf8');
-					data = data.replace(/&lt;a href=&quot;(#[0-9]*)&quot;&gt;(?:#[0-9]*)&lt;\/a&gt;/g, '<a href="$1">$1</a>')
+					
+					data = data.replace(/&lt;a href=&quot;(#[0-9]*)&quot;&gt;(?:#[0-9]*)&lt;\/a&gt;/g, '<a href="$1">$1</a>');
+					
 					var bl = '블라인드';
+					
 					var exists = fs.existsSync('./user/' + ip + '-admin.txt');
 					if(exists) {
 						var exists = fs.existsSync('./user/' + admin + '-admin.txt');
@@ -952,7 +977,8 @@ router.get('/topic/:page/:topic', function(req, res) {
 
 // post
 router.post('/topic/:page/:topic', function(req, res) {
-    ip = yourip(req,res);
+    ip = yourip(req, res);
+	
     stopy = stop(ip);
     if(stopy) {
 	    res.redirect('/ban');
@@ -966,43 +992,49 @@ router.post('/topic/:page/:topic', function(req, res) {
 		    var file = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic);
 		    var sfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/starter.txt';
 		    var nfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/number.txt';
-		    var rfile = './topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/';
-		    var yfile = './topic/' + encodeURIComponent(req.params.page) + '/';
-		    var exists = fs.existsSync(yfile);
+			
+		    var exists = fs.existsSync('./topic/' + encodeURIComponent(req.params.page) + '/');
 		    if(!exists) {
 			  fs.mkdirSync('./topic/' + encodeURIComponent(req.params.page), 0755);
 		    }
-		    var exists = fs.existsSync(rfile);
+		    var exists = fs.existsSync('./topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic) + '/');
 		    if(!exists) {
 		  	  fs.mkdirSync('./topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic), 0755);
 		    }
 		    else {
 			  var number = fs.readFileSync(nfile, 'utf8');
 		    }
-		    page = req.params.page;
+			
 		    var today = getNow();
+			
 		    var name = req.params.page;
 		    var name2 = req.params.topic;
-		    tplus(ip, today, name, name2)
+			
+		    tplus(ip, today, name, name2);
+			
 		    req.body.content = req.body.content.replace(/(#[0-9]*)/g, "<a href=\"$1\">$1</a>");
+			
 		    var exists = fs.existsSync(sfile);
 			if(!exists) {
 				fs.openSync(sfile,'w+');
 				fs.writeFileSync(sfile, ip, 'utf8');
+				
 				var number = 1;
+				
 				fs.writeFileSync(nfile, number + 1, 'utf8');
 				fs.writeFileSync(file + '/' + number + '-ip.txt', ip, 'utf8');
 				fs.writeFileSync(file + '/' + number + '-today.txt', today, 'utf8');
 				fs.writeFileSync(file + '/' + number + '.txt',req.body.content);
 			}
 			else {
-				var number = fs.readFileSync(nfile, 'utf8');
-				number = Number(number);
+				var number = Number(fs.readFileSync(nfile, 'utf8'));
+
 				fs.writeFileSync(nfile, number + 1, 'utf8');
 				fs.writeFileSync(file + '/' + number + '-ip.txt', ip, 'utf8');
 				fs.writeFileSync(file + '/' + number + '-today.txt', today, 'utf8');
 				fs.writeFileSync(file + '/' + number + '.txt',req.body.content);
 			}
+			
 			res.redirect('/topic/' + encodeURIComponent(req.params.page) + '/' + encodeURIComponent(req.params.topic));
 	    }
     }
@@ -1010,22 +1042,26 @@ router.post('/topic/:page/:topic', function(req, res) {
 
 // 대역 밴 겟
 router.get('/allban/:ip', function(req, res) {
-	test = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/;
-	if(test.exec(req.params.ip)) {
-		name = rname(name);
-		var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
-		if(exists) {
-			var nowthat = '차단 해제';
-		}
-		else {
-			var nowthat = '차단';
-		}
-		ip = yourip(req,res);
-		aya = admin(ip);
-		if(aya) {
-			res.redirect('/Access');
-		}
-		else {
+	name = rname(name);
+	
+	ip = yourip(req, res);
+	
+	aya = admin(ip);
+	if(aya) {
+		res.redirect('/Access');
+	}
+	else {
+		test = /^[0-9](?:[0-9])?(?:[0-9])?\.[0-9](?:[0-9])?(?:[0-9])?/;
+		if(test.exec(req.params.ip)) {
+			var exists = fs.existsSync('./user/' + encodeURIComponent(req.params.ip) + '-allban.txt');
+			var nowthat;
+			if(exists) {
+				nowthat = '차단 해제';
+			}
+			else {
+				nowthat = '차단';
+			}
+			
 			res.status(200).render('allban-get', { 
 				enter: nowthat, 
 				title: req.params.ip, 
@@ -1035,16 +1071,18 @@ router.get('/allban/:ip', function(req, res) {
 			res.end();
 			return;
 		}
-	}
-	else {
-		res.redirect('/ban/' + req.params.ip);
+		else {
+			res.redirect('/ban/' + req.params.ip);
+		}
 	}
 });
 
 // 대역 밴 추가
 router.post('/allban/:ip', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
+	
     aya = admin(ip);
+	
 	if(aya) {
 		res.redirect('/Access');
 	}
@@ -1090,7 +1128,7 @@ router.get('/ban/:ip', function(req, res) {
 	else {
 		var nowthat = '차단';
 	}
-	ip = yourip(req,res);
+	ip = yourip(req, res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -1109,7 +1147,7 @@ router.get('/ban/:ip', function(req, res) {
 
 // 밴 추가
 router.post('/ban/:ip', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -1148,7 +1186,7 @@ router.post('/ban/:ip', function(req, res) {
  
 // 어드민 부여
 router.get('/admin/:ip', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	var test = mine(ip);
 	if(test) {
 		res.redirect('/Access');
@@ -1279,7 +1317,7 @@ router.get('/ban', function(req, res) {
 
 // ACL
 router.get('/acl/:page', function(req, res) {
-	ip = yourip(req,res);
+	ip = yourip(req, res);
     aya = admin(ip);
 	if(aya) {
 		res.redirect('/Access');
@@ -1373,7 +1411,7 @@ router.get('/diff/:page/:r/:rr', function(req, res) {
 router.get('/revert/:page/:r', function(req, res) {
 	licen = rlicen(licen);
 	name = rname(name);
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	page = req.params.page;
 	var title2 = encodeURIComponent(req.params.page);
 	var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/'+ req.params.r +'.txt');
@@ -1409,7 +1447,7 @@ router.get('/revert/:page/:r', function(req, res) {
 // 되돌리기 2
 router.post('/revert/:page/:r', function(req, res) {
 	name = rname(name);
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
@@ -1486,7 +1524,7 @@ router.get('/delete/:page', function(req, res) {
 // 문서 삭제 처리
 router.post('/delete/:page', function(req, res) {
 	name = rname(name);
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
@@ -1567,7 +1605,7 @@ router.get('/move/:page', function(req, res) {
 // post
 router.post('/move/:page', function(req, res) {
 	name = rname(name);
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	page = req.params.page;
 	aya = editstop(ip, page);
 	if(aya) {
@@ -1805,7 +1843,7 @@ router.post('/preview/:page', function(req, res) {
 		var redirect = /^#(?:넘겨주기|redirect)\s([^\n]*)/ig;
 		var data = req.body.content;
 		data = data.replace(redirect, " * 리다이렉트 [[$1]]");
-		ip = yourip(req,res);
+		ip = yourip(req, res);
 		page = req.params.page;
 		stopy = stop(ip);
 		if(stopy) {
@@ -2353,7 +2391,7 @@ router.get('/edit/:page', function(req, res) {
 		res.redirect('/long');
 	}
 	else {
-		ip = yourip(req,res);
+		ip = yourip(req, res);
 		page = req.params.page;
 		stopy = stop(ip);
 		if(stopy) {
@@ -2462,7 +2500,7 @@ router.get('/edit/:page/:number', function(req, res) {
 router.post('/edit/:page', function(req, res) {
 	name = rname(name);
 	var today = getNow();
-	ip = yourip(req,res);
+	ip = yourip(req, res);
 	page = req.params.page;
 	stopy = stop(ip);
 	if(stopy) {
