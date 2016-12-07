@@ -1500,7 +1500,6 @@ router.post('/revert/:page/:r', function(req, res) {
 					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
 					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w+');
 					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', req.params.r + ' 버전으로 되돌림', 'utf8');
-					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt','w');
 					break;
 				}
 			}
@@ -1580,7 +1579,6 @@ router.post('/delete/:page', function(req, res) {
 						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
 						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w');
 						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', '문서를 삭제함', 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt','w');
 						break;
 					}
 				}
@@ -2757,8 +2755,22 @@ router.get('/history/:page', function(req, res) {
 		var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
 		if(exists) {
 			ip = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', 'utf8');
-			var today = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', 'utf8');
-			var send = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', 'utf8');
+			
+			var today;
+			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt');
+			if(exists) {
+				today = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', 'utf8');
+			}
+			
+			var send;
+			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt');
+			if(exists) {
+				send = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', 'utf8');
+			}
+			else {
+				send = '<br>';
+			}
+		
 			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt');
 			if(exists) {
 				var leng = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt', 'utf8');
