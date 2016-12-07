@@ -44,38 +44,38 @@ function rname(name) {
 
 // 시간
 function getNow() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; 
-  var yyyy = today.getFullYear();
-  var nn = today.getHours();
-  var aa = today.getMinutes();
-  var ee = today.getSeconds();
-  if(dd<10) {
-	  dd='0'+dd;
-  }
-  if(mm<10) {
-	  mm='0'+mm;
-  }
- if(aa<10) {
-	  aa='0'+aa;
-  }
-  if(ee<10) {
-	  ee='0'+ee;
-  }
-  if(nn/12>=1) {
-	  if(nn<10) {
-		  nn='0'+nn;
-	  }
-	  nn= 'PM ' + nn%12;						
-  }
-  else {
-	  if(nn<10) {
-		  nn='0'+nn;
-	  }
-	  nn= 'AM ' + nn;
-  }
-  return yyyy+'-' + mm+'-'+dd+' / '+nn+':'+aa+':'+ee;
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; 
+    var yyyy = today.getFullYear();
+    var nn = today.getHours();
+    var aa = today.getMinutes();
+    var ee = today.getSeconds();
+    if(dd<10) {
+  	    dd='0'+dd;
+    }
+    if(mm<10) {
+	    mm='0'+mm;
+    }
+    if(aa<10) {
+	    aa='0'+aa;
+    }
+    if(ee<10) {
+	    ee='0'+ee;
+    }
+    if(nn/12>=1) {
+	    if(nn<10) {
+		    nn='0'+nn;
+	    }
+	    nn= 'PM ' + nn%12;						
+    }
+    else {
+	    if(nn<10) {
+		    nn='0'+nn;
+	    }
+	    nn= 'AM ' + nn;
+    }
+    return yyyy+'-' + mm+'-'+dd+' / '+nn+':'+aa+':'+ee;
 }
 
 // 아이피
