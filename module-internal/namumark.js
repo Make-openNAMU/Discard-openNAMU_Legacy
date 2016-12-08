@@ -63,7 +63,51 @@ module.exports = function(req, n, ba){
   
   six = xssFilters.inHTMLData(six);
   
-  six = six.replace(/{{\|((?:[^|]*)\n?(?:(?:(?:(?:(?:[^|]*)(?:\n)?)+))))\|}}/g, "<table><tbody><tr><td>$1</td></tr></tbody></table>");
+  six = six.replace(/{{\|((?:(?:[^|]*)\n?)+)\|}}/g, "<table><tbody><tr><td>$1</td></tr></tbody></table>");
+  
+  var font = /{{{((?:(?!{{{)(?!}}}).)*)}}}/;
+  
+  var big = /^\+([1-5])\s?(.*)$/;
+  var small = /^\-([1-5])\s?(.*)$/;
+  var size;
+  
+  var color1 = /^(#[0-9a-f-A-F]{6})\s?(.*)$/;
+  var color2 = /^(#[0-9a-f-A-F]{3})\s?(.*)$/;
+  var color3 = /^#(\w+)\s?(.*)$/;
+  var colordata;
+  
+  var fontdata;
+  while(true) {
+	  console.log(font.exec(six));
+	  if(fontdata = font.exec(six)) {
+		  if(size = big.exec(fontdata[1])) {
+			  fontdata[1] = '<span class#is#"font-size-' + size[1] + '">' + size[2] + '</span>';
+			  six = six.replace(font, fontdata[1]);
+		  }
+		  else if(size = small.exec(fontdata[1])) {
+			  fontdata[1] = '<span class#is#"font-size-small-' + size[1] + '">' + size[2] + '</span>';
+			  six = six.replace(font, fontdata[1]);
+		  }
+		  else if(colordata = color1.exec(fontdata[1])) {
+			  fontdata[1] = '<span span style#is#"color:' + colordata[1] + ';">' + colordata[2] + '</span>';
+			  six = six.replace(font, fontdata[1]);
+		  }
+		  else if(colordata = color2.exec(fontdata[1])) {
+			  fontdata[1] = '<span span style#is#"color:' + colordata[1] + ';">' + colordata[2] + '</span>';
+			  six = six.replace(font, fontdata[1]);
+		  }
+		  else if(colordata = color3.exec(fontdata[1])) {
+			  fontdata[1] = '<span span style#is#"color:' + colordata[1] + ';">' + colordata[2] + '</span>';
+			  six = six.replace(font, fontdata[1]);
+		  }
+		  else {
+			  six = six.replace(font, '');
+		  }
+	  }
+	  else {
+		  break;
+	  }
+  }
   
   /* 모니위키 및 추가 파싱 부분 */
   six = six.replace(/\[(table\s?bordercolor=(?:\w+))\]/ig, '<$1>');
@@ -88,52 +132,13 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[\[youtube\(([^)]*)\)\]\]/ig, "[youtube($1)]");
   six = six.replace(/\[\[include\(([^)]*)\)\]\]/ig, "[include($1)]");
   
+  six = six.replace(/\[yt\(([^)]*)\)\]/ig, "[youtube($1)]");
+  six = six.replace(/\[in\(([^)]*)\)\]/ig, "[include($1)]");
+  
   six = six.replace(/\[\[(?:목차|tableofcontents)\]\]/ig, "[목차]");
   six = six.replace(/\[\[(?:각주|footnote)\]\]/ig, "[각주]");
   
   six = six.replace(/attachment:((?:[^.]*)\.(?:jpg|png|gif|jpeg))/ig, "http://rigvedawiki.net/w/%EC%95%84%EC%9D%B4%ED%8F%B0%207?action=download&value=$1");
-  
-  six = six.replace(/\[yt\(([^)]*)\)\]/ig, "[youtube($1)]");
-  six = six.replace(/\[in\(([^)]*)\)\]/ig, "[include($1)]");
-  
-  six = six.replace(/{{{#!html\s?/ig, "");
-  
-  six = six.replace(/{{{#!wiki\s?([^\n]*)\n/ig, "<div $1>");
-  
-  var folding = /{{{#!folding\s?([^\n]*)/;
-  var fold;
-  var j = 0;
-  while(true) {
-	  j = j + 1;
-	  if(fold = folding.exec(six)) {
-		  if(fold[1]) {
-			six = six.replace(folding, "<div style=\"border: 1px solid;background: #f5f5f5;\" class=\"folding-area\"><div class=\"folding\"><div style=\"padding: 10px;\" onclick=\"var f=document.getElementById('folding_" + j + "');var s=f.style.display=='block';f.style.display=s?'none':'block';this.className=s?'':'opened';\">$1</div><div id=\"folding_" + j + "\" style=\"display: none;\"><div style=\"padding: 10px;\"><br>");
-		  }
-		  else {
-			six = six.replace(folding, "<div style=\"border: 1px solid;background: #f5f5f5;\" class=\"folding-area\"><div class=\"folding\"><div style=\"padding: 10px;\" onclick=\"var f=document.getElementById('folding_" + j + "');var s=f.style.display=='block';f.style.display=s?'none':'block';this.className=s?'':'opened';\"><br></div><div id=\"folding_" + j + "\" style=\"display: none;\"><div style=\"padding: 10px;\"><br>");
-		  }
-	  }
-	  else {
-		  break;
-	  }
-  }
-  six = six.replace(/&}}}/g, '</div></div></div></div>');
-  
-  six = six.replace(/{{{(#[0-9a-f-A-F]{6})\s?/ig, "<span style#is#\"color:$1;\">");
-  six = six.replace(/{{{(#[0-9a-f-A-F]{3})\s?/ig, "<span style#is#\"color:$1;\">");
-  six = six.replace(/{{{#(\w+)\s?/ig, "<span style#is#\"color:$1;\">");
-  
-  six = six.replace(/{{{\+([1-5])\s?/g, "<span class#is#\"font-size-$1\">");
-  six = six.replace(/{{{\-([1-5])\s?/g, "<span class#is#\"font-size-small-$1\">");
-  
-  six = six.replace(/\+}}}/g, "</span>");
-  six = six.replace(/\-}}}/g, "</span>");
-  
-  six = six.replace(/#}}}/g, "</span>");
-  
-  six = six.replace(/#!}}}/g, "</div>");
-  
-  six = six.replace(/}}}/g, "");
   
   var table = /\n{\|([^\n]*)/;
   var td1 = /<table\s?bordercolor=(\w+)>/;
