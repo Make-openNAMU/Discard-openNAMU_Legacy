@@ -94,10 +94,8 @@ function yourip(req, res) {
 		var exists = fs.existsSync('./user/' + id + '.txt');
 		if(exists) {
 			var pass = fs.readFileSync('./user/' + id + '.txt', 'utf8');
-			var test = pw;
-			var testby = bcrypt.compareSync(test, pass);
 
-			if(testby === true) {
+			if(bcrypt.compareSync(pw, pass) === true) {
 				test = decodeURIComponent(id);
 			}
 		}
