@@ -386,7 +386,7 @@ router.post('/login', function(req, res) {
 				var cookies = new Cookies( req, res )
 				, AqoursGanbaRuby, WikiID
 				
-				cookies.set( "AqoursGanbaRuby", test );
+				cookies.set( "AqoursGanbaRuby", sha3_512(req.body.pw) );
 				cookies.set( "WikiID", encodeURIComponent(req.body.id) );
 			}
 			else {
