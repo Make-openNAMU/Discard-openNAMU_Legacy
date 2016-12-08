@@ -40,7 +40,6 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(\/del)>/ig, '[$1]');
   six = six.replace(/<(\/s)>/ig, '[$1]');
   
-  /* 추가 파싱 */
   six = six.replace(/<(table\s?bordercolor=(?:\w+))>/ig, '[$1]');
   six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
   six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
@@ -59,7 +58,6 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(:)>/ig, '[$1]');
   six = six.replace(/<(\()>/ig, '[$1]');
   six = six.replace(/<(\))>/ig, '[$1]');
-  /* ----------- */
   
   six = xssFilters.inHTMLData(six);
   
@@ -109,7 +107,6 @@ module.exports = function(req, n, ba){
 	  }
   }
   
-  /* 모니위키 및 추가 파싱 부분 */
   six = six.replace(/\[(table\s?bordercolor=(?:\w+))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))\]/ig, '<$1>');
@@ -128,7 +125,8 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[(:)\]/ig, '<$1>');
   six = six.replace(/\[(\()\]/ig, '<$1>');
   six = six.replace(/\[(\))\]/ig, '<$1>');
-  
+
+  /* 모니위키 및 추가 파싱 부분 */  
   six = six.replace(/\[\[youtube\(([^)]*)\)\]\]/ig, "[youtube($1)]");
   six = six.replace(/\[\[include\(([^)]*)\)\]\]/ig, "[include($1)]");
   
