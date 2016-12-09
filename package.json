@@ -25,7 +25,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node app.js"
+    "test": "node app.js",
     "start": "forever start ./app.js",
     "stop": "forever stopall",
     "restart": "forever stopall && forever start ./app.js"
