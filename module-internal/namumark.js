@@ -78,7 +78,6 @@ module.exports = function(req, n, ba){
   
   var fontdata;
   while(true) {
-	  console.log(font.exec(six));
 	  if(fontdata = font.exec(six)) {
 		  if(size = big.exec(fontdata[1])) {
 			  fontdata[1] = '<span class#is#"font-size-' + size[1] + '">' + size[2] + '</span>';
