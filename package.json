@@ -19,7 +19,6 @@
     "node-schedule": "^1.1.0",
     "parse-katex": "^0.3.0",
     "pug": "^2.0.0-beta5",
-    "scrypt-password": "^0.0.1",
     "serve-favicon": "^2.3.0",
     "text-diff": "^1.0.1",
     "xss-filters": "^1.2.7"
