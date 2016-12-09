@@ -1493,12 +1493,8 @@ router.post('/revert/:page/:r', function(req, res) {
 				if(!exists) {
 					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt','w+');
 					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt', revert, 'utf8');
-					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt','w+');
-					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', ip, 'utf8');
-					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt','w+');
-					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
-					fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w+');
-					fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', req.params.r + ' 버전으로 되돌림', 'utf8');
+					
+					jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.json', {ip: ip, today: today, send: req.params.r + ' 버전으로 되돌림', leng: ''});
 					break;
 				}
 			}
@@ -1572,12 +1568,8 @@ router.post('/delete/:page', function(req, res) {
 					if(!exists) {
 						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt','w');
 						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt', req.body.content, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt','w');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', ip, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt','w');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', '문서를 삭제함', 'utf8');
+						
+						jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.json', {ip: ip, today: today, send: '문서를 삭제함', leng: ''});
 						break;
 					}
 				}
@@ -1664,10 +1656,7 @@ router.post('/move/:page', function(req, res) {
 						var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
 						if(exists) {
 							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'.txt');
-							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'-ip.txt','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'-ip.txt');
-							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'-today.txt','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'-today.txt');
-							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'-send.txt','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'-send.txt');
-							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'-leng.txt','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'-leng.txt');
+							fs.renameSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.json','./history/' + encodeURIComponent(req.body.title) + '/r'+ i +'.json');
 						}
 						else {
 							break;
@@ -1680,13 +1669,8 @@ router.post('/move/:page', function(req, res) {
 						if(!exists) {
 							fs.openSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '.txt','w+');
 							fs.writeFileSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '.txt', req.body.content, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-ip.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-ip.txt', ip, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-today.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-today.txt', today, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-send.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-send.txt', '<a href="/w/'+encodeURIComponent(req.params.page)+'">'+req.params.page+'</a> 에서 <a href="/w/'+encodeURIComponent(req.params.page)+'">' + req.body.title + '</a> 문서로 문서를 이동함', 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '-leng.txt','w+');
+							
+							jsonfile.writeFileSync('./history/' + encodeURIComponent(req.body.title) + '/r' + i + '.json', {ip: ip, today: today, send: '<a href="/w/'+encodeURIComponent(req.params.page)+'">'+req.params.page+'</a> 에서 <a href="/w/'+encodeURIComponent(req.params.page)+'">' + req.body.title + '</a> 문서로 문서를 이동함', leng: ''});
 							break;
 						}
 					}
@@ -2567,21 +2551,15 @@ router.post('/edit/:page', function(req, res) {
 			var leng = rplus(ip, today, name, rtitle, now, req, content);
 			fs.exists(file, function (exists) {
 				if(!exists) {
-					fs.openSync(file,'w');
+					fs.openSync(file,'w+');
 					fs.writeFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', req.body.content, 'utf8');
 					var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt');
 					if(!exists) {
 						fs.mkdirSync('./history/' + encodeURIComponent(req.params.page), 0755);
 						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt','w+');
 						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt', req.body.content, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-ip.txt','w+');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-ip.txt', ip, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-today.txt','w+');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-today.txt', today, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-send.txt','w+');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-send.txt', req.body.send, 'utf8');
-						fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-leng.txt','w+');
-						fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-leng.txt', leng, 'utf8');
+						
+						jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1.json', {ip: ip, today: today, send: req.body.send, leng: leng});
 					}
 					else {
 						var i = 0;
@@ -2591,14 +2569,8 @@ router.post('/edit/:page', function(req, res) {
 							if(!exists) {
 								fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt','w+');
 								fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt', req.body.content, 'utf8');
-								fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt','w+');
-								fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', ip, 'utf8');
-								fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt','w+');
-								fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
-								fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w+');
-								fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', req.body.send, 'utf8');
-								fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt','w+');
-								fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt', leng, 'utf8');
+								
+								jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.json', {ip: ip, today: today, send: req.body.send, leng: leng});
 								break;
 							}
 						}
@@ -2606,9 +2578,7 @@ router.post('/edit/:page', function(req, res) {
 				}
 				else {
 					var ndata = fs.readFileSync(file, 'utf8');
-					if(req.body.content === ndata) {
-
-					}
+					if(req.body.content === ndata) {}
 					else {
 						fs.writeFileSync('./data/' + encodeURIComponent(req.params.page)+'.txt', req.body.content, 'utf8');
 						var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt');
@@ -2616,14 +2586,8 @@ router.post('/edit/:page', function(req, res) {
 							fs.mkdirSync('./history/' + encodeURIComponent(req.params.page), 0755);
 							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt','w+');
 							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1.txt', req.body.content, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-ip.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-ip.txt', ip, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-today.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-today.txt', today, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-send.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-send.txt', req.body.send, 'utf8');
-							fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r1-leng.txt','w+');
-							fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1-leng.txt', leng, 'utf8');
+							
+							jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r1.json', {ip: ip, today: today, send: req.body.send, leng: leng});
 						}
 						else {
 							var i = 0;
@@ -2633,14 +2597,8 @@ router.post('/edit/:page', function(req, res) {
 								if(!exists) {
 									fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt','w+');
 									fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.txt', req.body.content, 'utf8');
-									fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt','w+');
-									fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', ip, 'utf8');
-									fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt','w+');
-									fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', today, 'utf8');
-									fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt','w+');
-									fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', req.body.send, 'utf8');
-									fs.openSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt','w+');
-									fs.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt', leng, 'utf8');
+									
+									jsonfile.writeFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '.json', {ip: ip, today: today, send: req.body.send, leng: leng});
 									break;
 								}
 							}
@@ -2753,44 +2711,26 @@ router.get('/history/:page', function(req, res) {
 		i = i + 1;
 		var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.txt');
 		if(exists) {
-			ip = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-ip.txt', 'utf8');
+			var alldata = jsonfile.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r'+ i +'.json');
+			console.log(alldata);
 			
-			var today;
-			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt');
-			if(exists) {
-				today = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-today.txt', 'utf8');
-			}
-			else {
-				today = '';
-			}
+			ip = alldata.ip;	
+			today = alldata.today;
+			var send = alldata.send;
+			var leng = alldata.leng;
 			
-			var send;
-			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt');
-			if(exists) {
-				send = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-send.txt', 'utf8');
+			var plus = /\+/g;
+			var or = /\-/g;
+			if(plus.exec(leng)) {
+				var pageplus = '</a> <span style="color:green;">(' + leng + ')</span>';
 			}
-			else {
-				send = '<br>';
-			}
-		
-			var exists = fs.existsSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt');
-			if(exists) {
-				var leng = fs.readFileSync('./history/' + encodeURIComponent(req.params.page) + '/r' + i + '-leng.txt', 'utf8');
-				var plus = /\+/g;
-				var or = /\-/g;
-				if(plus.exec(leng)) {
-					var pageplus = '</a> <span style="color:green;">(' + leng + ')</span>';
-				}
-				else if(or.exec(leng)) {
-					var pageplus = '</a> <span style="color:red;">(' + leng + ')</span>';
-				}
-				else {
-					var pageplus = '</a>';
-				}
+			else if(or.exec(leng)) {
+				var pageplus = '</a> <span style="color:red;">(' + leng + ')</span>';
 			}
 			else {
 				var pageplus = '</a>';
 			}
+			
 			if(send === '<br>') {}
 			else {
 				send = htmlencode.htmlEncode(send);
