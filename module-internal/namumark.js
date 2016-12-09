@@ -39,7 +39,8 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(\/small)>/ig, '[$1]');
   six = six.replace(/<(\/del)>/ig, '[$1]');
   six = six.replace(/<(\/s)>/ig, '[$1]');
-  
+ 
+/* 
   six = six.replace(/<(table\s?bordercolor=(?:\w+))>/ig, '[$1]');
   six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))>/ig, '[$1]');
   six = six.replace(/<(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))>/ig, '[$1]');
@@ -58,6 +59,7 @@ module.exports = function(req, n, ba){
   six = six.replace(/<(:)>/ig, '[$1]');
   six = six.replace(/<(\()>/ig, '[$1]');
   six = six.replace(/<(\))>/ig, '[$1]');
+*/
   
   six = xssFilters.inHTMLData(six);
   
@@ -107,6 +109,7 @@ module.exports = function(req, n, ba){
 	  }
   }
   
+/*
   six = six.replace(/\[(table\s?bordercolor=(?:\w+))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{3}))\]/ig, '<$1>');
   six = six.replace(/\[(table\s?bordercolor=(?:#[0-9a-f-A-F]{6}))\]/ig, '<$1>');
@@ -125,6 +128,7 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[(:)\]/ig, '<$1>');
   six = six.replace(/\[(\()\]/ig, '<$1>');
   six = six.replace(/\[(\))\]/ig, '<$1>');
+*/
 
   /* 모니위키 및 추가 파싱 부분 */  
   six = six.replace(/\[\[youtube\(([^)]*)\)\]\]/ig, "[youtube($1)]");
@@ -137,7 +141,8 @@ module.exports = function(req, n, ba){
   six = six.replace(/\[\[(?:각주|footnote)\]\]/ig, "[각주]");
   
   six = six.replace(/attachment:((?:[^.]*)\.(?:jpg|png|gif|jpeg))/ig, "http://rigvedawiki.net/w/%EC%95%84%EC%9D%B4%ED%8F%B0%207?action=download&value=$1");
-  
+
+/*  
   var table = /\n{\|([^\n]*)/;
   var td1 = /<table\s?bordercolor=(\w+)>/;
   var td2 = /<table\s?bordercolor=(#[0-9a-f-A-F]{3})>/i;
@@ -292,6 +297,8 @@ module.exports = function(req, n, ba){
 		  break;
 	  }
   }
+*/
+
   /* 끝 */
   
   var ohhhh = /\n>\s?((?:[^\n]*)(?:(?:(?:(?:\n>\s?)(?:[^\n]*))+)?))/;
