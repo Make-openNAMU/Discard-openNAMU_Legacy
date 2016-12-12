@@ -10,8 +10,6 @@ var Cookies = require( "cookies" );
 var bcrypt = require('bcrypt-nodejs');
 var sha3_512 = require('js-sha3').sha3_512;
 var jsonfile = require('jsonfile');
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('wiki.sql');
 
 var licen;
 var name;
