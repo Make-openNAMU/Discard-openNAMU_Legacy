@@ -8,7 +8,7 @@ block content
   h2.title!= '<span style="margin-left:5px"></span>(이동)'
   br
   span 정말로 이동 하시겠습니까?
-  form#usrform(method='POST', action='/m/' + title2)
+  form#usrform(method='POST', action='/move/' + title2)
     br
     input.form-control.input-sm(type='text', placeholder=title, value=title, name='title')
     br

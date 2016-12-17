@@ -1,0 +1,9 @@
+extends wiki
+block content
+  div(id='tool')
+    nav.menu
+      a.menu-item.selected(href='#', onclick='return false') 문서
+      a.menu-item(href='/edit/user/' + title2) 수정
+      a.menu-item(href='/w/' + subtitle, style='display:' + dis) 상위문서
+  h1.title= title
+  div!= content

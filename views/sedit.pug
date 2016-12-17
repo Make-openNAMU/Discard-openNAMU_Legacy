@@ -12,6 +12,7 @@ block content
       dd
         textarea(rows='30', cols='100', name='content', form='usrform')= content
         input(name='send', type="text", style="margin-top:10px;width:100%")
+        textarea(form='usrform', name='contect2', style='display:none;')= content2
         .form-actions
           button.btn.btn-primary(type='submit', onclick="f1.action='/edit/"+title2+"';") 저장
           button.btn(type='submit', onclick="f1.action='/preview/"+title2+"';") 미리보기

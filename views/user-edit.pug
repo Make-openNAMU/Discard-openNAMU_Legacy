@@ -6,12 +6,11 @@ block content
     a.menu-item(href='/w/' + title2) 문서
   h1.title= title
   h2.title!= '<span style="margin-left:5px"></span>(수정)'
-  form#usrform(name='f1', method='POST', action='/edit/' + title2)
+  form#usrform(name='f1', method='POST', action='/edit/user/' + title2)
     dl.form-group
       dt
       dd
         textarea(rows='30', cols='100', name='content', form='usrform')= content
         input(name='send', type="text", style="margin-top:10px;width:100%")
         .form-actions
-          button.btn.btn-primary(type='submit', onclick="f1.action='/edit/"+title2+"';") 저장
-          button.btn(type='submit', onclick="f1.action='/preview/"+title2+"';") 미리보기
+          button.btn.btn-primary(type='submit', onclick="f1.action='/edit/user/"+title2+"';") 저장

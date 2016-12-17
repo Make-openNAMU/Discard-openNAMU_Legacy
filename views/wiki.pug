@@ -13,10 +13,10 @@ html
     br
     .one-fifth.column
       div(id='top')
-        a(href='/', id='logo')= name
+        a(href='/', id='logo')= wikiname
         div
-          a(href='/rc', id='RecentChanges') <i class="fa fa-refresh" aria-hidden="true"></i> <span id='is_mobile'>최근 변경</span>
-          a(href='/rd', id='RecentChanges') <i class="fa fa-comment" aria-hidden="true"></i> <span id='is_mobile'>최근 토론</span>
+          a(href='/RecentChanges', id='RecentChanges') <i class="fa fa-refresh" aria-hidden="true"></i> <span id='is_mobile'>최근 변경</span>
+          a(href='/RecentDiscuss', id='RecentChanges') <i class="fa fa-comment" aria-hidden="true"></i> <span id='is_mobile'>최근 토론</span>
           a(href='/random', id='log') <i class="fa fa-random" aria-hidden="true"></i>
           a(href='/user', id='log') <i class="fa fa-user" aria-hidden="true"></i>
           a(href='/other', id='log') <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -27,9 +27,9 @@ html
             span.input-group-button
               button.btn <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
     <div class="scroll-buttons"><a class="scroll-toc" href="#toc"><i class="fa fa-list-alt" aria-hidden="true"></i></a><a class="scroll-button" href="#top" id='left'><i class="fa fa-arrow-up" aria-hidden="true"></i></a><a class="scroll-bottom" href="#powered" id='right'><i class="fa fa-arrow-down" aria-hidden="true"></i></a></div>
-    div(id='left_bar')!= '<a href="#">맨 위로</a><br><br><div style="display:none;display:' + tocset + ';">' + left + '</div>'
+    div(id='left_bar')!= '<a href="#">맨 위로</a><br><br><div style="display:none;display:' + lb + ';">' + lbc + '</div>'
     .four-fifths.column
       block content
       hr(id="last")
-      p!= license
+      p!= License
       <div id='powered'><a href="https://github.com/teamatus/openNAMU"><img src="/images/on2.png" width="100px"></div>

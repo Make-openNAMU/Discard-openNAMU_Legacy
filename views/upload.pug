@@ -1,0 +1,12 @@
+extends wiki
+block content
+  div(id='tool') 
+   nav.menu
+    a.menu-item.selected(href='#', onclick='return false') 업로드
+  h1= title
+  br
+  <form action="/Upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="files" />
+    <input class="btn" type="submit" value="파일 업로드" />
+    <br>
+    p 미완성이라 작동 안 합니다.

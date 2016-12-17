@@ -1,0 +1,8 @@
+extends wiki
+block content
+  div(id='tool')
+    nav.menu
+      a.menu-item.selected(onclick='history.back(-1)') 이전
+  h1= message
+  h2= error.status
+  pre= error.stack
