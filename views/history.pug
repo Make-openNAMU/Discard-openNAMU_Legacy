@@ -3,7 +3,14 @@ block content
   div(id='tool')
     nav.menu
       a.menu-item.selected(href='#', onclick='return false') 역사
-      a.menu-item(href='/w/' + title3) 문서
+      a.menu-item(href='/w/' + title2) 문서
   h1.title= title
-  h2.title!= title2
+  h2.title!= '<span style="margin-left:5px"></span>(역사)'
+  br
+  form#usrform(method='POST', action='/history/' + title2)
+    input.form-control.input-sm(type='text', id='history', name='r')
+    input.form-control.input-sm(type='text', id='history', name='rr')
+    button.btn.btn-primary(type='submit') 리비전 비교
+  div(style="margin-top:10px")
+  <table style="width: 100%;"><tbody><tr><td style="text-align: center;width:33.33%">넘버</td><td style="text-align: center;width:33.33%">기여자</td><td style="text-align: center;width:33.33%">시간</td></tr></tbody></table>
   div!= content

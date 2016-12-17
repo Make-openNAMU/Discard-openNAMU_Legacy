@@ -318,6 +318,7 @@ module.exports = function(req, n, ba){
   six = six.replace(/##\s?([^\n]*)\n/g, "<div style='display:none;'>$1</div>");
   six = six.replace(/\[\[분류:([^\]\]]*)\]\]/g, "");
   
+/*
   var include = /\[include\(([^)]*)\)\]/i;
   var under;
   while(true) {
@@ -339,7 +340,8 @@ module.exports = function(req, n, ba){
 		  break;
 	  }
   }
-  
+*/
+
   var tong = /\[\[([^\]\]]*)\|([^\]\]]*)\]\]/;
   var tang = /\[\[([^\]\]]*)\]\]/;
   var match;
@@ -367,6 +369,7 @@ module.exports = function(req, n, ba){
 			}
 			six = six.replace(tong, '<a '+van+' title#is#"'+htmlencode.htmlEncode(testing[1])+testing[2]+'" href#is#"/w/'+encodeURIComponent(testing[1])+testing[2]+'">'+match[2]+'</a>');
 			
+			/*
 			var exists = fs.existsSync('./data/' + encodeURIComponent(testing[1])+'-back/');
 			if(!exists) {
 				fs.mkdirSync('./data/' + encodeURIComponent(testing[1])+'-back/', 777);
@@ -380,6 +383,7 @@ module.exports = function(req, n, ba){
 					});
 				}
 			}
+			*/
 		}
 		else {
 			if(!fs.existsSync('./data/' + encodeURIComponent(match[1])+'.txt')) {
@@ -387,6 +391,7 @@ module.exports = function(req, n, ba){
 			}
 			six = six.replace(tong, '<a '+van+' title#is#"'+htmlencode.htmlEncode(match[1])+'" href#is#"/w/'+encodeURIComponent(match[1])+'">'+match[2]+'</a>');
 			
+			/*
 			var exists = fs.existsSync('./data/' + encodeURIComponent(match[1])+'-back/');
 			if(!exists) {
 				fs.mkdirSync('./data/' + encodeURIComponent(match[1])+'-back/', 777);
@@ -400,6 +405,7 @@ module.exports = function(req, n, ba){
 					});
 				}
 			}
+			*/
 		}
 	}
 	else {
@@ -418,6 +424,7 @@ module.exports = function(req, n, ba){
 			}
 			six = six.replace(tang, '<a '+van+' title#is#"'+htmlencode.htmlEncode(testing[1]+testing[2])+'" href#is#"/w/'+encodeURIComponent(testing[1])+testing[2]+'">'+match[1]+'</a>');
 			
+			/*
 			var exists = fs.existsSync('./data/' + encodeURIComponent(testing[1])+'-back/');
 			if(!exists) {
 				fs.mkdirSync('./data/' + encodeURIComponent(testing[1])+'-back/', 777);
@@ -431,6 +438,7 @@ module.exports = function(req, n, ba){
 					});
 				}
 			}
+			*/
 		}
 		else {
 			if(!fs.existsSync('./data/' + encodeURIComponent(match[1])+'.txt')) {
@@ -438,6 +446,7 @@ module.exports = function(req, n, ba){
 			}
 			six = six.replace(tang, '<a '+van+' title#is#"'+htmlencode.htmlEncode(match[1])+'" href#is#"/w/'+encodeURIComponent(match[1])+'">'+match[1]+'</a>');
 			
+			/*
 			var exists = fs.existsSync('./data/' + encodeURIComponent(match[1])+'-back/');
 			if(!exists) {
 				fs.mkdirSync('./data/' + encodeURIComponent(match[1])+'-back/', 777);
@@ -451,6 +460,7 @@ module.exports = function(req, n, ba){
 					});
 				}
 			}
+			*/
 		}
 	}
 	else {

@@ -3,14 +3,14 @@ block content
   div(id='tool')
     nav.menu
       a.menu-item.selected(href='#', onclick='return false') 문서
-      a.menu-item(href='/edit/' + title2) 수정
-      a.menu-item(href='/topic/' + title2) 토론
-      a.menu-item(href='/delete/' + title2) 삭제
-      a.menu-item(href='/move/' + title2) 이동
-      a.menu-item(href='/raw/' + title2) Raw
-      a.menu-item(href='/history/' + title2) 역사
-      a.menu-item(href='/xref/' + title2) 역링크
-      a.menu-item(href='/w/' + subtitle, style='display:' + dis) 상위문서
+      a.menu-item(href='/e/' + title2) 수정
+      a.menu-item(href='/t/' + title2) 토론
+      a.menu-item(href='/d/' + title2) 삭제
+      a.menu-item(href='/m/' + title2) 이동
+      a.menu-item(href='/r/' + title2) Raw
+      a.menu-item(href='/h/' + title2) 역사
+      a.menu-item(href='/xr/' + title2) 역링크
+      a.menu-item(href='/w/' + subtitle, style='display:none;display:' + dis + ';') 상위문서
   h1.titlee= title
   h2.titlee!= acl
   div!= content

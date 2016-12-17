@@ -1,0 +1,9 @@
+extends wiki
+block content
+  div(id='tool')
+    nav.menu
+      a.menu-item.selected(href='#', onclick='return false') Raw
+      a.menu-item(href='/w/' + title2) 문서
+  h1.title= title
+  h2.title!= '<span style="margin-left:5px"></span>(Raw)'
+  div!= content

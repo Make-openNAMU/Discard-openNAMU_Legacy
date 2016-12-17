@@ -8,6 +8,6 @@ block content
   h2.title!= '<span style="margin-left:5px"></span>(되돌리기)'
   br
   span 정말로 되돌리겠습니까?
-  form#usrform(method='POST', action='/revert/' + title2 + '/' + title3)
+  form#usrform(method='POST', action='/h/' + title3 + '/rv/' + title2)
     br
     button.btn.btn-primary(type='submit') 되돌리기
