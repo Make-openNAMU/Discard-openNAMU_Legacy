@@ -3,3 +3,4 @@
 
 ## 차기 버전
  * [파이나무](https://github.com/2DU/PYnamu)
+ * [deesle](https://github.com/deesle/deesle)
